@@ -44,11 +44,11 @@ module TSFunq {
             });
         }
 
-        static build<TService, TFunc>(bag: { factory: TFunc, container: Container, reuse?: ReuseScope, owner?: Owner, inatnce?: TService }) {
+        static build<TService, TFunc>(bag: { factory: TFunc, container: Container, reuse?: ReuseScope, owner?: Owner, instance?: TService }) {
             var serviceEntry = new GenericServiceEntry<TService, TFunc>(bag.factory);
 
             serviceEntry.container = bag.container;
-            serviceEntry.instance = bag.inatnce;
+            serviceEntry.instance = bag.instance;
             serviceEntry.owner = bag.owner;
             serviceEntry.reuse = bag.reuse;
 

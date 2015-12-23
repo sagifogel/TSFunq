@@ -4,3 +4,4 @@ obj
 *.user
 src/*.js
 src/*.js.map
+.vs

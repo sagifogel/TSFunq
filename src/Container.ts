@@ -20,7 +20,7 @@ module TSFunq {
 
         constructor() {
             var serviceEntry = GenericServiceEntry.build<Container, (container: Container) => Container>({
-                inatnce: this,
+                instance: this,
                 factory: c => c,
                 container: this,
                 owner: Owner.External,
