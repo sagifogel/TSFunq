@@ -19,11 +19,25 @@ var TSFunq;
 })(TSFunq || (TSFunq = {}));
 var TSFunq;
 (function (TSFunq) {
+    function resolveByCode(ctor) {
+        var match = ctor.toString().match(NameResolver.nameRegex);
+        return (match && match.length > 0 && match[1]) || resolveByPrototype(ctor);
+    }
+    function resolveByPrototype(ctor) {
+        var buffer = new Array();
+        var prototype = ctor.prototype;
+        for (var item in prototype) {
+            if (typeof prototype[item] === "function") {
+                buffer.push(item);
+            }
+        }
+        return buffer.join("");
+    }
     var NameResolver = (function () {
         function NameResolver() {
         }
         NameResolver.resolve = function (ctor) {
-            return ctor.name || ctor.toString().match(NameResolver.nameRegex)[1];
+            return ctor.name || resolveByCode(ctor);
         };
         NameResolver.nameRegex = /function ([^\(]+)/;
         return NameResolver;
@@ -35,6 +49,7 @@ var TSFunq;
 (function (TSFunq) {
     var ResolutionException = (function () {
         function ResolutionException(ctor, missingServiceName) {
+            this.name = "ResolutionException";
             var buffer = ["Required dependency of type "];
             buffer.push(TSFunq.NameResolver.resolve(ctor));
             if (missingServiceName) {
@@ -76,8 +91,7 @@ var TSFunq;
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var TSFunq;
 (function (TSFunq) {
@@ -257,7 +271,7 @@ var TSFunq;
             this.childContainers = new TSFunq.Stack();
             this.services = new TSFunq.Dictionary();
             var serviceEntry = TSFunq.GenericServiceEntry.build({
-                inatnce: this,
+                instance: this,
                 factory: function (c) { return c; },
                 container: this,
                 owner: TSFunq.Owner.External,

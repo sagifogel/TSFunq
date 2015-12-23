@@ -6,7 +6,7 @@
     }
 
     export interface IInitializable<TService> {
-        initializedBy(initializer: (container: Container, service: TService) => void): IReusedOwned;
+        initializedBy(initializer: Action<Container, TService>): IReusedOwned;
     }
 
     export interface IReusedOwned extends IReused, IOwned {

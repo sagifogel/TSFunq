@@ -2,8 +2,8 @@
 
 module TSFunq {
     export class ResolutionException implements Error {
-        public name: string;
         public message: string;
+        public name: string = "ResolutionException";
 
         constructor(ctor: Function, missingServiceName?: string) {
             var buffer: Array<string> = ["Required dependency of type "];

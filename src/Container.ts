@@ -11,15 +11,15 @@
 
 module TSFunq {
     export class Container implements IDisposable {
-        parent: Container;
-        defaultOwner = Owner.Container;
-        defaultReuse = ReuseScope.Container;
-        disposables = new Stack<IDisposable>();
-        childContainers = new Stack<Container>();
-        services = new Dictionary<ServiceKey, ServiceEntry>();
+        private parent: Container;
+        private defaultOwner = Owner.Container;
+        private defaultReuse = ReuseScope.Container;
+        private disposables = new Stack<IDisposable>();
+        private childContainers = new Stack<Container>();
+        private services = new Dictionary<ServiceKey, ServiceEntry>();
 
         constructor() {
-            var serviceEntry = GenericServiceEntry.build<Container, (container: Container) => Container>({
+            var serviceEntry = GenericServiceEntry.build<Container, Func<Container, Container>>({
                 instance: this,
                 factory: c => c,
                 container: this,
@@ -51,12 +51,12 @@ module TSFunq {
             }
         }
 
-        register<TService>(ctor: { new (): TService; }, factory: (container: Container) => TService): IGenericRegistration<TService> {
+        register<TService>(ctor: { new (): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
             return this.registerNamed(ctor, null, factory);
         }
 
-        registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: (container: Container) => TService): IGenericRegistration<TService> {
-            return this.registerImpl<TService, (container: Container) => TService>(ctor, name, factory);
+        registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
+            return this.registerImpl<TService, Func<Container, TService>>(ctor, name, factory);
         }
 
         registerImpl<TService, TFunc>(ctor: new () => TService, name: string, factory: TFunc): GenericServiceEntry<TService, TFunc> {
@@ -95,14 +95,14 @@ module TSFunq {
         }
 
         lazyResolveNamed<TService>(ctor: new () => TService, name: string): () => TService {
-            this.throwIfNotRegistered<TService, (container: Container) => TService>(ctor, name);
+            this.throwIfNotRegistered<TService, Func<Container, TService>>(ctor, name);
 
             return () => this.resolveNamed<TService>(ctor, name);
         }
 
         resolveImpl<TService>(ctor: new () => TService, name: string, throwIfMissing: boolean): TService {
             var instance: TService;
-            var entry = this.getEntry<TService, (container: Container) => TService>(ctor, name, throwIfMissing);
+            var entry = this.getEntry<TService, Func<Container, TService>>(ctor, name, throwIfMissing);
 
             if (!entry) {
                 return null;
@@ -119,7 +119,7 @@ module TSFunq {
         }
 
         getEntry<TService, TFunc>(ctor: new () => TService, serviceName: string, throwIfMissing: boolean): GenericServiceEntry<TService, TFunc> {
-            var container = this;
+            var container: Container = this;
             var entry: ServiceEntry;
             var key = new ServiceKey(ctor, serviceName);
             var outResult = <{ out: any }>{};

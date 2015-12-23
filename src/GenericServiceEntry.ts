@@ -7,7 +7,7 @@
 module TSFunq {
     export class GenericServiceEntry<TService, TFunc> extends ServiceEntry implements IGenericRegistration<TService> {
         public instance: TService;
-        initializer: (container: Container, service: TService) => void;
+        private initializer: (container: Container, service: TService) => void;
 
         constructor(public factory: TFunc) {
             super();
@@ -29,7 +29,7 @@ module TSFunq {
             }
         }
 
-        initializedBy(initializer: (container: Container, service: TService) => void): IReusedOwned {
+        initializedBy(initializer: Action<Container, TService>): IReusedOwned {
             this.initializer = initializer;
             return this;
         }
@@ -40,11 +40,11 @@ module TSFunq {
                 owner: this.owner,
                 factory: this.factory,
                 container: newContainer,
-                initializer : this.initializer,
+                initializer: this.initializer,
             });
         }
 
-        static build<TService, TFunc>(bag: { factory: TFunc, container: Container, reuse?: ReuseScope, owner?: Owner, instance?: TService }) {
+        static build<TService, TFunc>(bag: { factory: TFunc, container: Container, reuse?: ReuseScope, owner?: Owner, instance?: TService, initializer?: Action<Container, TService> }) {
             var serviceEntry = new GenericServiceEntry<TService, TFunc>(bag.factory);
 
             serviceEntry.container = bag.container;

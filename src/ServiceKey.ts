@@ -4,9 +4,9 @@
 
 module TSFunq {
     export class ServiceKey implements IEquatable<ServiceKey> {
-        hash: number;
+        private hash: number;
 
-        constructor(public ctor: Function, public serviceName?: string) {
+        constructor(private ctor: Function, private serviceName?: string) {
             var name = NameResolver.resolve(ctor);
             var equatbaleString = new EquatbaleString(name);
 

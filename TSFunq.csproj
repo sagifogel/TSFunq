@@ -10,7 +10,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TypeScriptToolsVersion>1.5</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.7</TypeScriptToolsVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -25,11 +25,11 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="aliasing\Func.ts" />
     <TypeScriptCompile Include="src\Container.ts" />
     <TypeScriptCompile Include="src\Dictionary.ts" />
     <TypeScriptCompile Include="src\EquatbaleString.ts" />
     <TypeScriptCompile Include="src\IHashable.ts" />
-    <TypeScriptCompile Include="d.ts\Map.d.ts" />
     <TypeScriptCompile Include="src\ResolutionException.ts" />
     <TypeScriptCompile Include="src\GenericServiceEntry.ts" />
     <TypeScriptCompile Include="src\IDisposable.ts" />
@@ -41,7 +41,6 @@
     <TypeScriptCompile Include="src\ServiceKey.ts" />
     <TypeScriptCompile Include="src\Stack.ts" />
     <TypeScriptCompile Include="src\Syntax.ts" />
-    <TypeScriptCompile Include="d.ts\WeakMap.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">

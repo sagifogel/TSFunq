@@ -2,7 +2,7 @@
 
 module TSFunq {
     export class EquatbaleString implements IEquatable<EquatbaleString> {
-        constructor(public value: string) {
+        constructor(private value: string) {
         }
 
         equals(other: EquatbaleString): boolean {
