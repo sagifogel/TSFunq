@@ -131,7 +131,7 @@ module TSFunq {
             entry = outResult.out;
 
             if (entry) {
-                if (entry.reuse === ReuseScope.Container && entry.container != this) {
+                if (entry.reuse === ReuseScope.Container && entry.container !== this) {
                     entry = (<GenericServiceEntry<TService, TFunc>>entry).cloneFor(this);
                     this.services.add(key, entry);
                 }

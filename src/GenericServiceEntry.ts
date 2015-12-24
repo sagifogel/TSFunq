@@ -16,7 +16,7 @@ module TSFunq {
         initializeInstance(instance: TService): void {
             var dynamicInstance: any = instance;
 
-            if (this.reuse != ReuseScope.None) {
+            if (this.reuse !== ReuseScope.None) {
                 this.instance = instance;
             }
 
@@ -40,7 +40,7 @@ module TSFunq {
                 owner: this.owner,
                 factory: this.factory,
                 container: newContainer,
-                initializer: this.initializer,
+                initializer: this.initializer
             });
         }
 
