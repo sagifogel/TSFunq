@@ -103,7 +103,7 @@ var TSFunq;
         }
         GenericServiceEntry.prototype.initializeInstance = function (instance) {
             var dynamicInstance = instance;
-            if (this.reuse != TSFunq.ReuseScope.None) {
+            if (this.reuse !== TSFunq.ReuseScope.None) {
                 this.instance = instance;
             }
             if (this.owner === TSFunq.Owner.Container && dynamicInstance.dispose) {
@@ -123,7 +123,7 @@ var TSFunq;
                 owner: this.owner,
                 factory: this.factory,
                 container: newContainer,
-                initializer: this.initializer,
+                initializer: this.initializer
             });
         };
         GenericServiceEntry.build = function (bag) {
@@ -355,7 +355,7 @@ var TSFunq;
             }
             entry = outResult.out;
             if (entry) {
-                if (entry.reuse === TSFunq.ReuseScope.Container && entry.container != this) {
+                if (entry.reuse === TSFunq.ReuseScope.Container && entry.container !== this) {
                     entry = entry.cloneFor(this);
                     this.services.add(key, entry);
                 }
