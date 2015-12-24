@@ -1,2 +1,2 @@
-# TSFunc
-Func Dependency injection container port for TypeScript
+# TSFunq
+[Funq](https://funq.codeplex.com/) Dependency injection container port for TypeScript
