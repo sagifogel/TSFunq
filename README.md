@@ -1,2 +1,2 @@
 # TSFunq
-[Funq](https://funq.codeplex.com/) Dependency injection container port for TypeScript
+<a href="https://funq.codeplex.com/" target="_blank">Funq</a> Dependency injection container port for TypeScript
