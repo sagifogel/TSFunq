@@ -20,7 +20,7 @@ module TSFunq {
                 this.instance = instance;
             }
 
-            if (this.owner == Owner.Container && dynamicInstance.dispose) {
+            if (this.owner === Owner.Container && dynamicInstance.dispose) {
                 this.container.trackDisposable(<IDisposable>dynamicInstance);
             }
 

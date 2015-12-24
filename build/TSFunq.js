@@ -106,7 +106,7 @@ var TSFunq;
             if (this.reuse != TSFunq.ReuseScope.None) {
                 this.instance = instance;
             }
-            if (this.owner == TSFunq.Owner.Container && dynamicInstance.dispose) {
+            if (this.owner === TSFunq.Owner.Container && dynamicInstance.dispose) {
                 this.container.trackDisposable(dynamicInstance);
             }
             if (this.initializer) {
@@ -355,7 +355,7 @@ var TSFunq;
             }
             entry = outResult.out;
             if (entry) {
-                if (entry.reuse == TSFunq.ReuseScope.Container && entry.container != this) {
+                if (entry.reuse === TSFunq.ReuseScope.Container && entry.container != this) {
                     entry = entry.cloneFor(this);
                     this.services.add(key, entry);
                 }
