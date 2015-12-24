@@ -16,11 +16,11 @@ module TSFunq {
         initializeInstance(instance: TService): void {
             var dynamicInstance: any = instance;
 
-            if (this.reuse !== ReuseScope.None) {
+            if (this.reuse !== ReuseScope.none) {
                 this.instance = instance;
             }
 
-            if (this.owner === Owner.Container && dynamicInstance.dispose) {
+            if (this.owner === Owner.container && dynamicInstance.dispose) {
                 this.container.trackDisposable(<IDisposable>dynamicInstance);
             }
 

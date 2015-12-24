@@ -1,19 +1,19 @@
 var TSFunq;
 (function (TSFunq) {
     (function (Owner) {
-        Owner[Owner["Container"] = 0] = "Container";
-        Owner[Owner["External"] = 1] = "External";
-        Owner[Owner["Default"] = 2] = "Default";
+        Owner[Owner["container"] = 0] = "container";
+        Owner[Owner["external"] = 1] = "external";
+        Owner[Owner["default"] = 2] = "default";
     })(TSFunq.Owner || (TSFunq.Owner = {}));
     var Owner = TSFunq.Owner;
 })(TSFunq || (TSFunq = {}));
 var TSFunq;
 (function (TSFunq) {
     (function (ReuseScope) {
-        ReuseScope[ReuseScope["Container"] = 0] = "Container";
-        ReuseScope[ReuseScope["Hierarchy"] = 1] = "Hierarchy";
-        ReuseScope[ReuseScope["None"] = 2] = "None";
-        ReuseScope[ReuseScope["Default"] = 1] = "Default";
+        ReuseScope[ReuseScope["container"] = 0] = "container";
+        ReuseScope[ReuseScope["hierarchy"] = 1] = "hierarchy";
+        ReuseScope[ReuseScope["none"] = 2] = "none";
+        ReuseScope[ReuseScope["default"] = 1] = "default";
     })(TSFunq.ReuseScope || (TSFunq.ReuseScope = {}));
     var ReuseScope = TSFunq.ReuseScope;
 })(TSFunq || (TSFunq = {}));
@@ -27,9 +27,7 @@ var TSFunq;
         var buffer = new Array();
         var prototype = ctor.prototype;
         for (var item in prototype) {
-            if (typeof prototype[item] === "function") {
-                buffer.push(item);
-            }
+            buffer.push(item);
         }
         return buffer.join("");
     }
@@ -103,10 +101,10 @@ var TSFunq;
         }
         GenericServiceEntry.prototype.initializeInstance = function (instance) {
             var dynamicInstance = instance;
-            if (this.reuse !== TSFunq.ReuseScope.None) {
+            if (this.reuse !== TSFunq.ReuseScope.none) {
                 this.instance = instance;
             }
-            if (this.owner === TSFunq.Owner.Container && dynamicInstance.dispose) {
+            if (this.owner === TSFunq.Owner.container && dynamicInstance.dispose) {
                 this.container.trackDisposable(dynamicInstance);
             }
             if (this.initializer) {
@@ -265,8 +263,8 @@ var TSFunq;
 (function (TSFunq) {
     var Container = (function () {
         function Container() {
-            this.defaultOwner = TSFunq.Owner.Container;
-            this.defaultReuse = TSFunq.ReuseScope.Container;
+            this.defaultOwner = TSFunq.Owner.container;
+            this.defaultReuse = TSFunq.ReuseScope.container;
             this.disposables = new TSFunq.Stack();
             this.childContainers = new TSFunq.Stack();
             this.services = new TSFunq.Dictionary();
@@ -274,8 +272,8 @@ var TSFunq;
                 instance: this,
                 factory: function (c) { return c; },
                 container: this,
-                owner: TSFunq.Owner.External,
-                reuse: TSFunq.ReuseScope.Container
+                owner: TSFunq.Owner.external,
+                reuse: TSFunq.ReuseScope.container
             });
             this.services.add(new TSFunq.ServiceKey(Container), serviceEntry);
         }
@@ -296,6 +294,16 @@ var TSFunq;
         };
         Container.prototype.register = function (ctor, factory) {
             return this.registerNamed(ctor, null, factory);
+        };
+        Container.prototype.registerInstance = function (instance) {
+            return this.registerNamedInstance(null, instance);
+        };
+        Container.prototype.registerNamedInstance = function (name, instance) {
+            var ctor = instance.constructor;
+            var entry = this.registerImpl(ctor, name, null);
+            entry.reusedWithin(TSFunq.ReuseScope.hierarchy)
+                .ownedBy(TSFunq.Owner.external);
+            entry.initializeInstance(instance);
         };
         Container.prototype.registerNamed = function (ctor, name, factory) {
             return this.registerImpl(ctor, name, factory);
@@ -355,7 +363,7 @@ var TSFunq;
             }
             entry = outResult.out;
             if (entry) {
-                if (entry.reuse === TSFunq.ReuseScope.Container && entry.container !== this) {
+                if (entry.reuse === TSFunq.ReuseScope.container && entry.container !== this) {
                     entry = entry.cloneFor(this);
                     this.services.add(key, entry);
                 }

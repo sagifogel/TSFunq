@@ -10,9 +10,7 @@
         var prototype = ctor.prototype;
 
         for (var item in prototype) {
-            if (typeof prototype[item] === "function") {
-                buffer.push(item);
-            }
+            buffer.push(item);
         }
 
         return buffer.join("");

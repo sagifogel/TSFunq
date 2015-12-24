@@ -12,8 +12,8 @@
 module TSFunq {
     export class Container implements IDisposable {
         private parent: Container;
-        private defaultOwner = Owner.Container;
-        private defaultReuse = ReuseScope.Container;
+        private defaultOwner = Owner.container;
+        private defaultReuse = ReuseScope.container;
         private disposables = new Stack<IDisposable>();
         private childContainers = new Stack<Container>();
         private services = new Dictionary<ServiceKey, ServiceEntry>();
@@ -23,8 +23,8 @@ module TSFunq {
                 instance: this,
                 factory: c => c,
                 container: this,
-                owner: Owner.External,
-                reuse: ReuseScope.Container
+                owner: Owner.external,
+                reuse: ReuseScope.container
             });
 
             this.services.add(new ServiceKey(Container), serviceEntry);
@@ -53,6 +53,20 @@ module TSFunq {
 
         register<TService>(ctor: { new (): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
             return this.registerNamed(ctor, null, factory);
+        }
+
+        registerInstance<TService>(instance: TService): void {
+            return this.registerNamedInstance<TService>(null, instance);
+        }
+
+        registerNamedInstance<TService>(name: string, instance: TService): void {
+            var ctor = <new () => TService>instance.constructor;
+            var entry = this.registerImpl<TService, Func<Container, TService>>(ctor, name, null);
+
+            entry.reusedWithin(ReuseScope.hierarchy)
+                 .ownedBy(Owner.external);
+
+            entry.initializeInstance(instance);
         }
 
         registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
@@ -131,7 +145,7 @@ module TSFunq {
             entry = outResult.out;
 
             if (entry) {
-                if (entry.reuse === ReuseScope.Container && entry.container !== this) {
+                if (entry.reuse === ReuseScope.container && entry.container !== this) {
                     entry = (<GenericServiceEntry<TService, TFunc>>entry).cloneFor(this);
                     this.services.add(key, entry);
                 }

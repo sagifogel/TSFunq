@@ -1,7 +1,7 @@
 ﻿module TSFunq {
     export enum Owner {
-        Container,
-        External,
-        Default
+        container,
+        external,
+        default
     }
 }

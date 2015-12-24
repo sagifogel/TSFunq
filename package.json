@@ -1,0 +1,16 @@
+{
+  "name": "TSFunq",
+  "version": "1.0.0",
+  "dependencies": {
+    "gulp": "*"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jasmine": "^2.2.1",
+    "jasmine": "^2.4.1"
+  },
+  "description": "TSFunq",
+  "scripts": {
+    "gulp": "gulp"
+  }
+}
