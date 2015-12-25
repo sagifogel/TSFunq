@@ -1,12 +1,12 @@
-﻿var TSFunq = require("../../../build/TSFunq");
-var Subjects = require("../subjects");
+﻿//var TSFunq = require("../../../build/TSFunq");
+//var Subjects = require("../subjects");
 
 describe("ShouldRegister", function () {
     it("should register a factory and should resolve an instance of the registered type", function () {
         var foo;
         var container = new TSFunq.Container();
 
-        container.registerInstance(Foo, function (c) { return new Foo(); });
+        container.register(Foo, function (c) { return new Foo(); });
         foo = container.resolve(Foo);
 
         expect(foo).not.toBeNull();
@@ -14,15 +14,15 @@ describe("ShouldRegister", function () {
 });
 
 describe("RegisteredInstanceIsResolved", function () {
-    it("should register a registered instance and resolved the same insatnce as the registered one", function () {
+    it("should register a an instance and resolved the same insatnce as the registered one", function () {
         var f2;
         var f1 = new Foo();
         var container = new TSFunq.Container();
 
-        container.register(f1);
+        container.registerInstance(f1);
         f2 = container.resolve(Foo);
 
-        expect(f1).toEqual(f2);
+        expect(f1).toBe(f2);
     });
 });
 
@@ -56,7 +56,7 @@ describe("ThrowsIfCannotResolveNamed", function () {
 });
 
 describe("RegistersDelegateForType", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory for a specific type and resolve an instance using its factory", function () {
         var foo;
         var container = new TSFunq.Container();
 
@@ -68,31 +68,31 @@ describe("RegistersDelegateForType", function () {
     });
 });
 
-describe("RegistersNamedInstances", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+describe("RegistersNamedFactories", function () {
+    it("should regiter two named factories for the same type and resolve two different instances", function () {
         var foo;
         var foo2;
         var container = new TSFunq.Container();
 
-        container.register(Foo, "foo", function (c) { return new Foo(); });
-        container.register(Foo, "foo2", function (c) { return new Foo2(); });
+        container.registerNamed(Foo, "foo", function (c) { return new Foo(); });
+        container.registerNamed(Foo, "foo2", function (c) { return new Foo(); });
         foo = container.resolveNamed(Foo, "foo");
         foo2 = container.resolveNamed(Foo, "foo2");
 
-        expect(foo).not.toEqual(foo2);
+        expect(foo).not.toBe(foo2);
         expect(foo.constructor).toEqual(Foo);
         expect(foo2.constructor).toEqual(Foo);
     });
 });
 
 describe("RegisterOrderForNamedDoesNotMatter", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register two factories for the same type, which one of them is named factory and should resolve eachone using its factory", function () {
         var foo;
         var foo2;
         var container = new TSFunq.Container();
 
-        container.Register(Foo, function (c) { return new Foo(); });
-        container.Register(Foo, "foo", function (c) { return new Foo("foo"); });
+        container.register(Foo, function (c) { return new Foo(); });
+        container.registerNamed(Foo, "foo", function (c) { return new Foo("foo"); });
         foo = container.resolve(Foo);
         foo2 = container.resolveNamed(Foo, "foo");
 
@@ -103,16 +103,16 @@ describe("RegisterOrderForNamedDoesNotMatter", function () {
 });
 
 describe("TryResolveReturnsNullIfNotRegistered", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
-        var foo;
+    it("should return null and not throw a ResolutionException when type is not registered", function () {
         var container = new TSFunq.Container();
+        var foo = container.tryResolve(Foo);
 
-        expect(container.tryResolve(Foo)).toBeNull();
+        expect(foo).toBeNull();
     });
 });
 
 describe("TryResolveNamedReturnsNullIfNotRegistered", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should return null and not throw a ResolutionException when type is not registered", function () {
         var container = new TSFunq.Container();
         var foo = container.tryResolveNamed(Foo, "foo");
 
@@ -121,35 +121,36 @@ describe("TryResolveNamedReturnsNullIfNotRegistered", function () {
 });
 
 describe("TryResolveReturnsRegisteredInstance", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should resolve an instance when using the tryResolve[...] API", function () {
         var bar;
         var container = new TSFunq.Container();
 
-        container.Register(Bar, "bar", function (c) { return new Bar(); });
-
-        expect(container.tryResolveNamed(Bar, "bar")).not.toBeNull();
+        container.registerNamed(Bar, "bar", function (c) { return new Bar(); });
+        bar = container.tryResolveNamed(Bar, "bar");
+        expect(bar).not.toBeNull();
     });
 });
 
 describe("TryResolveReturnsRegisteredInstanceOnParent", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should create container and a child container and to resolve an instance using the child container's tryResolve[...] API", function () {
         var bar;
         var container = new TSFunq.Container();
         var child = container.createChildContainer();
 
-        container.Register(Bar, "bar", function (c) { return new Bar(); });
+        container.registerNamed(Bar, "bar", function (c) { return new Bar(); });
+        bar = child.tryResolveNamed(Bar, "bar");
 
-        expect(child.tryResolveNamed(Bar, "bar")).not.toBeNull();
+        expect(bar).not.toBeNull();
     });
 });
 
 describe("LatestRegistrationOverridesPrevious", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register two factories for the same type, thus overridng the previous one, and resolve an instance using the last factory", function () {
         var foo;
         var container = new TSFunq.Container();
 
-        container.Register(Foo, function (c) { return new Foo(); });
-        container.Register(Foo, function (c) { return new Foo("foo"); });
+        container.register(Foo, function (c) { return new Foo(); });
+        container.register(Foo, function (c) { return new Foo("foo"); });
         foo = container.resolve(Foo)
 
         expect(foo.value).toEqual("foo");
@@ -157,7 +158,7 @@ describe("LatestRegistrationOverridesPrevious", function () {
 });
 
 describe("DisposesContainerOwnedInstances", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register two disposable instances and mark only one of them to be owned by container. calling the dispose on the container will dispose only the marked one", function () {
         var containerOwned;
         var externallyOwned;
         var container = new TSFunq.Container();
@@ -168,13 +169,13 @@ describe("DisposesContainerOwnedInstances", function () {
         externallyOwned = container.resolve(Base);
         container.dispose();
 
-        expect(containerOwned.isDisposed).toBeTrue();
-        expect(externallyOwned.isDisposed).toBeFalse();
+        expect(containerOwned.isDisposed).toBeTruthy();
+        expect(externallyOwned.isDisposed).toBeFalsy();
     });
 });
 
 describe("ChildContainerCanReuseRegistrationsOnParent", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory on a container, create a child container and resolve an instance using the child container", function () {
         var foo;
         var container = new TSFunq.Container();
         var child = container.createChildContainer();
@@ -187,7 +188,7 @@ describe("ChildContainerCanReuseRegistrationsOnParent", function () {
 });
 
 describe("NoReuseCreatesNewInstancesAlways", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a none reused factory and resolve two different instances", function () {
         var foo1;
         var foo2;
         var container = new TSFunq.Container();
@@ -198,12 +199,12 @@ describe("NoReuseCreatesNewInstancesAlways", function () {
 
         expect(foo1).not.toBeNull();
         expect(foo2).not.toBeNull();
-        expect(foo1).not.toEqual(foo2);
+        expect(foo1).not.toBe(foo2);
     });
 });
 
 describe("ContainerScopedInstanceIsReused", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a reused factory within container and resolve the same instance multiple times", function () {
         var foo1;
         var foo2;
         var container = new TSFunq.Container();
@@ -214,12 +215,12 @@ describe("ContainerScopedInstanceIsReused", function () {
 
         expect(foo1).not.toBeNull();
         expect(foo2).not.toBeNull();
-        expect(foo1).toEqual(foo2);
+        expect(foo1).toBe(foo2);
     });
 });
 
 describe("HierarchyScopedInstanceIsReusedOnSameContainer", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a reused factory within hierarchy and resolve the same instance multiple times", function () {
         var foo1;
         var foo2;
         var container = new TSFunq.Container();
@@ -230,12 +231,12 @@ describe("HierarchyScopedInstanceIsReusedOnSameContainer", function () {
 
         expect(foo1).not.toBeNull();
         expect(foo2).not.toBeNull();
-        expect(foo1).toEqual(foo2);
+        expect(foo1).toBe(foo2);
     });
 });
 
 describe("HierarchyScopedInstanceIsReusedFromParentContainer", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a reused factory within hierarchy, create a child container and resolve the same instance from the parent and the child containers", function () {
         var foo1;
         var foo2;
         var parent = new TSFunq.Container();
@@ -252,25 +253,25 @@ describe("HierarchyScopedInstanceIsReusedFromParentContainer", function () {
 });
 
 describe("HierarchyScopedInstanceIsCreatedOnRegistrationContainer", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a reused factory within hierarchy of a disposble type, create a child container and resolve the instance from child container, then call the dispose function of the parent container and verify that the instance was not disposed", function () {
         var childFoo;
         var parentFoo;
         var parent = new TSFunq.Container();
         var child = parent.createChildContainer();
 
-        parent.register(Base, function (c) { return new Disposable(); }).reusedWithin(TSFunq.ReuseScope.hierarchy);
-        childFoo = child.resolve(Base);
-        parentFoo = parent.resolve(Base);
+        parent.register(Disposable, function (c) { return new Disposable(); }).reusedWithin(TSFunq.ReuseScope.hierarchy);
+        childFoo = child.resolve(Disposable);
+        parentFoo = parent.resolve(Disposable);
         child.dispose();
 
         expect(parentFoo).not.toBeNull();
         expect(childFoo).not.toBeNull();
-        expect(parentFoo.isDisposed).toBeFalse();
+        expect(parentFoo.isDisposed).toBeFalsy();
     });
 });
 
 describe("ContainerScopedInstanceIsNotReusedFromParentContainer", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a reused factory within container, create a child container and resolve different instances from the parent and the child container", function () {
         var foo1;
         var foo2;
         var parent = new TSFunq.Container();
@@ -282,31 +283,29 @@ describe("ContainerScopedInstanceIsNotReusedFromParentContainer", function () {
 
         expect(foo1).not.toBeNull();
         expect(foo2).not.toBeNull();
-        expect(foo1).not.toEqual(foo2);
+        expect(foo1).not.toBe(foo2);
     });
 });
-
 describe("DisposingParentContainerDisposesChildContainerAndInstances", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register two reused factories which one of them is within hierarchy and the second within container, create a child, resolve all instances and dispose the child container. All instances should be disposed", function () {
         var childFoo;
         var parentFoo;
         var parent = new TSFunq.Container();
         var child = parent.createChildContainer();
 
-        container.register(Disposable, function (c) { return new Disposable(); }).reusedWithin(TSFunq.Owner.hierarchy);
-        container.register(Base, function (c) { return new Disposable(); }).reusedWithin(TSFunq.Owner.container);
+        parent.register(Disposable, function (c) { return new Disposable(); }).reusedWithin(TSFunq.Owner.hierarchy);
+        parent.register(Base, function (c) { return new Disposable(); }).reusedWithin(TSFunq.Owner.container);
         parentFoo = parent.resolve(Disposable);
         childFoo = child.resolve(Base);
-
         parent.dispose();
 
-        expect(parentFoo.isDisposed).toBeTrue();
-        expect(childFoo.isDisposed).toBeTrue();
+        expect(parentFoo.isDisposed).toBeTruthy();
+        expect(childFoo.isDisposed).toBeTruthy();
     });
 });
 
 describe("ContainerOwnedNonReuseInstacesAreDisposed", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory of a disposable type which is not reused and owned by container, resolve an instance  and call the dispose funcion. The resolved type should be disposed", function () {
         var foo;
         var container = new TSFunq.Container();
 
@@ -317,12 +316,12 @@ describe("ContainerOwnedNonReuseInstacesAreDisposed", function () {
         foo = container.resolve(Disposable);
         container.dispose();
 
-        expect(foo.isDisposed).toBeTrue();
+        expect(foo.isDisposed).toBeTruthy();
     });
 });
 
 describe("ContainerOwnedAndContainerReusedInstacesAreDisposed", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory of a disposable type which is reused and owned by container, resolve an instance and call the dispose funcion. The resolved type should be disposed", function () {
         var foo;
         var container = new TSFunq.Container();
 
@@ -333,12 +332,12 @@ describe("ContainerOwnedAndContainerReusedInstacesAreDisposed", function () {
         foo = container.resolve(Disposable);
         container.dispose();
 
-        expect(foo.isDisposed).toBeTrue();
+        expect(foo.isDisposed).toBeTruthy();
     });
 });
 
 describe("ContainerOwnedAndHierarchyReusedInstacesAreDisposed", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory of a disposable type which is reused within hierarchy and owned by container, resolve an instance and call the dispose funcion. The resolved type should be disposed", function () {
         var foo;
         var container = new TSFunq.Container();
 
@@ -349,15 +348,15 @@ describe("ContainerOwnedAndHierarchyReusedInstacesAreDisposed", function () {
         foo = container.resolve(Disposable);
         container.dispose();
 
-        expect(foo.isDisposed).toBeTrue();
+        expect(foo.isDisposed).toBeTruthy();
     });
 });
 
 describe("ChildContainerInstanceWithParentRegistrationIsDisposed", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory of a disposable type which is reused within hierarchy and owned by container, create child container, resolve an instance from the child container and call the dispose funcion on of the child container. The resolved type should not be disposed", function () {
         var foo;
         var parent = new TSFunq.Container();
-        var child = parent.CreateChildContainer();
+        var child = parent.createChildContainer();
 
         parent.register(Disposable, function (c) { return new Disposable(); })
               .reusedWithin(TSFunq.ReuseScope.hierarchy)
@@ -366,15 +365,15 @@ describe("ChildContainerInstanceWithParentRegistrationIsDisposed", function () {
         foo = child.resolve(Disposable);
         child.dispose();
 
-        expect(foo.isDisposed).toBeFalse();
+        expect(foo.isDisposed).toBeFalsy();
     });
 });
 
 describe("DisposingParentContainerDisposesChildContainerInstances", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory of a disposable type which is reused within hierarchy and owned by container, create child container, resolve an instance from the child container and call the dispose funcion on of the child container. The resolved type should not be disposed", function () {
         var foo;
         var parent = new TSFunq.Container();
-        var child = parent.CreateChildContainer();
+        var child = parent.createChildContainer();
 
         parent.register(Disposable, function (c) { return new Disposable(); })
               .reusedWithin(TSFunq.ReuseScope.none)
@@ -383,12 +382,12 @@ describe("DisposingParentContainerDisposesChildContainerInstances", function () 
         foo = child.resolve(Disposable);
         parent.dispose();
 
-        expect(foo.isDisposed).toBeTrue();
+        expect(foo.isDisposed).toBeTruthy();
     });
 });
 
 describe("DisposingContainerDoesNotDisposeExternalOwnedInstances", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory of a disposable type which is reused within hierarchy and owned externaly, resolve an instance and call the dispose funcion. The resolved type should not be disposed", function () {
         var foo;
         var container = new TSFunq.Container();
 
@@ -399,12 +398,12 @@ describe("DisposingContainerDoesNotDisposeExternalOwnedInstances", function () {
         foo = container.resolve(Disposable);
         container.dispose();
 
-        expect(foo.isDisposed).toBeFalse();
+        expect(foo.isDisposed).toBeFalsy();
     });
 });
 
 describe("InitializerCalledWhenInstanceCreatedContainerReuse", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory of a initializable type which is reused within container, call the resolve multiple times and resolve the same instance. The initialization function should be called only once", function () {
         var i1;
         var i2;
         var container = new TSFunq.Container();
@@ -416,13 +415,13 @@ describe("InitializerCalledWhenInstanceCreatedContainerReuse", function () {
         i1 = container.resolve(Initializable);
         i2 = container.resolve(Initializable);
 
-        expect(i1).toBeEqual(i2);
-        expect(1).toBeEqual(i1.initializeCalls);
+        expect(i1).toBe(i2);
+        expect(1).toEqual(i1.initializeCalls);
     });
 });
 
 describe("InitializerCalledWhenInstanceCreatedHierarchyReuse", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory of a initializable type which is reused within hierarchy, call the resolve multiple times and resolve the same instance. The initialization function should be called only once", function () {
         var i1;
         var i2;
         var container = new TSFunq.Container();
@@ -434,13 +433,13 @@ describe("InitializerCalledWhenInstanceCreatedHierarchyReuse", function () {
         i1 = container.resolve(Initializable);
         i2 = container.resolve(Initializable);
 
-        expect(i1).toBeEqual(i2);
-        expect(1).toBeEqual(i1.initializeCalls);
+        expect(i1).toBe(i2);
+        expect(1).toEqual(i1.initializeCalls);
     });
 });
 
 describe("InitializerCalledWhenInstanceCreatedNoReuse", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory of a initializable type which is not reused, resolve different instances, but invoke the initialization function only once", function () {
         var i1;
         var i2;
         var container = new TSFunq.Container();
@@ -452,14 +451,14 @@ describe("InitializerCalledWhenInstanceCreatedNoReuse", function () {
         i1 = container.resolve(Initializable);
         i2 = container.resolve(Initializable);
 
-        expect(i1).not.toBeEqual(i2);
-        expect(1).toBeEqual(i1.initializeCalls);
-        expect(1).toBeEqual(i2.initializeCalls);
+        expect(i1).not.toBe(i2);
+        expect(1).toEqual(i1.initializeCalls);
+        expect(1).toEqual(i2.initializeCalls);
     });
 });
 
 describe("InitializerCalledOnChildContainerWhenInstanceCreated", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory of a initializable type which which is reused within container, create a child container and resolve the same instances using the child container. The initialization function should be called only once", function () {
         var i1;
         var i2;
         var container = new TSFunq.Container();
@@ -472,17 +471,16 @@ describe("InitializerCalledOnChildContainerWhenInstanceCreated", function () {
         i1 = child.resolve(Initializable);
         i2 = child.resolve(Initializable);
 
-        expect(i1).toBeEqual(i2);
-        expect(1).toBeEqual(i1.initializeCalls);
+        expect(i1).toBe(i2);
+        expect(1).toEqual(i1.initializeCalls);
     });
 });
 
 describe("InitializerCanRetrieveResolvedDependency", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register two factories for two types that each one is dependent upon the other. One of the registrations includes an initialization phase. The initialization function should resolve the circular dependency issue", function () {
         var view;
         var presenter;
         var container = new TSFunq.Container();
-        var child = container.createChildContainer();
 
         container.register(Presenter, function (c) { return new Presenter(c.resolve(View)); })
         container.register(View, function (c) { return new View(); })
@@ -491,12 +489,12 @@ describe("InitializerCanRetrieveResolvedDependency", function () {
         view = container.resolve(View);
         presenter = container.resolve(Presenter);
 
-        expect(view.presenter).toBeEqual(presenter);
+        expect(view.presenter).toBe(presenter);
     });
 });
 
 describe("InitializerCalledOnEntryContainer", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register two factories for two types that each one is dependent upon the other. One of the registrations includes an initialization phase. The initailized registraion will be reused withing hierarchy which means that the itialization function should not resolve the circular dependency issue. A ResolutionExcepton should be thrown", function () {
         var view;
         var container = new TSFunq.Container();
         var child = container.createChildContainer();
@@ -521,7 +519,7 @@ describe("InitializerCalledOnEntryContainer", function () {
         }
     });
 });
-
+/*
 describe("ThrowsIfRegisterContainerService", function () {
     it("should throw a ResolutionException when type is not registered", function () {
         var view;
@@ -669,3 +667,4 @@ describe("LazyResolveNamedThrowsIfNotRegistered", function () {
         }
     });
 });
+*/

@@ -10,7 +10,7 @@
 /// <reference path="resolutionexception.ts" />
 
 module TSFunq {
-    export class Container implements IDisposable {
+    export class Container implements IContainer, IDisposable {
         private parent: Container;
         private defaultOwner = Owner.container;
         private defaultReuse = ReuseScope.container;
@@ -51,16 +51,17 @@ module TSFunq {
             }
         }
 
-        register<TService>(ctor: { new (): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
+        register<TService extends Function>(ctor: { new (): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
             return this.registerNamed(ctor, null, factory);
         }
 
-        registerInstance<TService>(instance: TService): void {
+        registerInstance<TService extends Function>(instance: TService): void {
             return this.registerNamedInstance<TService>(null, instance);
         }
 
-        registerNamedInstance<TService>(name: string, instance: TService): void {
-            var ctor = <new () => TService>instance.constructor;
+        registerNamedInstance<TService extends Function>(name: string, instance: TService): void {
+            var proto = Object.getPrototypeOf(instance);
+            var ctor = <new () => TService>proto.constructor;
             var entry = this.registerImpl<TService, Func<Container, TService>>(ctor, name, null);
 
             entry.reusedWithin(ReuseScope.hierarchy)
@@ -69,7 +70,7 @@ module TSFunq {
             entry.initializeInstance(instance);
         }
 
-        registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
+        registerNamed<TService extends Function>(ctor: { new (): TService; }, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
             return this.registerImpl<TService, Func<Container, TService>>(ctor, name, factory);
         }
 
@@ -88,27 +89,27 @@ module TSFunq {
             return entry;
         }
 
-        resolve<TService>(ctor: new () => TService): TService {
+        resolve<TService extends Function>(ctor: new () => TService): TService {
             return this.resolveNamed<TService>(ctor, null);
         }
 
-        resolveNamed<TService>(ctor: new () => TService, name: string): TService {
+        resolveNamed<TService extends Function>(ctor: new () => TService, name: string): TService {
             return this.resolveImpl<TService>(ctor, name, true);
         }
 
-        tryResolve<TService>(ctor: new () => TService): TService {
+        tryResolve<TService extends Function>(ctor: new () => TService): TService {
             return this.tryResolveNamed<TService>(ctor, null);
         }
 
-        tryResolveNamed<TService>(ctor: new () => TService, name: string): TService {
+        tryResolveNamed<TService extends Function>(ctor: new () => TService, name: string): TService {
             return this.resolveImpl<TService>(ctor, name, false);
         }
 
-        lazyResolve<TService>(ctor: new () => TService): () => TService {
+        lazyResolve<TService extends Function>(ctor: new () => TService): () => TService {
             return this.lazyResolveNamed<TService>(ctor, null);
         }
 
-        lazyResolveNamed<TService>(ctor: new () => TService, name: string): () => TService {
+        lazyResolveNamed<TService extends Function>(ctor: new () => TService, name: string): () => TService {
             this.throwIfNotRegistered<TService, Func<Container, TService>>(ctor, name);
 
             return () => this.resolveNamed<TService>(ctor, name);

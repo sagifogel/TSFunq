@@ -126,10 +126,11 @@ var TSFunq;
         };
         GenericServiceEntry.build = function (bag) {
             var serviceEntry = new GenericServiceEntry(bag.factory);
-            serviceEntry.container = bag.container;
-            serviceEntry.instance = bag.instance;
             serviceEntry.owner = bag.owner;
             serviceEntry.reuse = bag.reuse;
+            serviceEntry.instance = bag.instance;
+            serviceEntry.container = bag.container;
+            serviceEntry.initializer = bag.initializer;
             return serviceEntry;
         };
         return GenericServiceEntry;
@@ -299,7 +300,8 @@ var TSFunq;
             return this.registerNamedInstance(null, instance);
         };
         Container.prototype.registerNamedInstance = function (name, instance) {
-            var ctor = instance.constructor;
+            var proto = Object.getPrototypeOf(instance);
+            var ctor = proto.constructor;
             var entry = this.registerImpl(ctor, name, null);
             entry.reusedWithin(TSFunq.ReuseScope.hierarchy)
                 .ownedBy(TSFunq.Owner.external);

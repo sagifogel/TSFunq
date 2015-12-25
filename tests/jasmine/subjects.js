@@ -8,7 +8,7 @@ function Base() {
 }
 
 Base.prototype = {
-    isDisposed,
+    isDisposed : null,
     dispose: function () {
         this.isDisposed = true;
     }

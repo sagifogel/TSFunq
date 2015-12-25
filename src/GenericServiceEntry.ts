@@ -47,10 +47,11 @@ module TSFunq {
         static build<TService, TFunc>(bag: { factory: TFunc, container: Container, reuse?: ReuseScope, owner?: Owner, instance?: TService, initializer?: Action<Container, TService> }) {
             var serviceEntry = new GenericServiceEntry<TService, TFunc>(bag.factory);
 
-            serviceEntry.container = bag.container;
-            serviceEntry.instance = bag.instance;
             serviceEntry.owner = bag.owner;
             serviceEntry.reuse = bag.reuse;
+            serviceEntry.instance = bag.instance;
+            serviceEntry.container = bag.container;
+            serviceEntry.initializer = bag.initializer
 
             return serviceEntry;
         }
