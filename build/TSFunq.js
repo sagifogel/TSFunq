@@ -409,3 +409,5 @@ var TSFunq;
     })();
     TSFunq.RegistrationException = RegistrationException;
 })(TSFunq || (TSFunq = {}));
+
+module.exports = TSFunq;

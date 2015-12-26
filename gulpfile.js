@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 var jasmine = require('gulp-jasmine');
 
-gulp.task('jasmine-container-fixture', function () {
+gulp.task('container-fixture', function () {
     return gulp.src('tests/jasmine/specs/container-fixture.js')
 		       .pipe(jasmine());
 });

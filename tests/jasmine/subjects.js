@@ -1,5 +1,4 @@
-﻿
-function Foo(value) { this.value = value; }
+﻿function Foo(value) { this.value = value; }
 
 function Bar() { }
 
@@ -37,3 +36,13 @@ Presenter.prototype.view = null;
 function View() { }
 
 View.prototype.Presenter = null;
+
+module.exports = {
+    Foo: Foo,
+    Bar: Bar,
+    View: View,
+    Base: Base,
+    Presenter: Presenter,
+    Disposable: Disposable,
+    Initializable: Initializable
+};

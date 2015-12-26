@@ -1,13 +1,13 @@
-﻿//var TSFunq = require("../../../build/TSFunq");
-//var Subjects = require("../subjects");
+﻿var TSFunq = require("../../../build/TSFunq");
+var Subjects = require("../../../tests/jasmine/subjects");
 
 describe("ShouldRegister", function () {
     it("should register a factory and should resolve an instance of the registered type", function () {
         var foo;
         var container = new TSFunq.Container();
 
-        container.register(Foo, function (c) { return new Foo(); });
-        foo = container.resolve(Foo);
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); });
+        foo = container.resolve(Subjects.Foo);
 
         expect(foo).not.toBeNull();
     });
@@ -16,11 +16,11 @@ describe("ShouldRegister", function () {
 describe("RegisteredInstanceIsResolved", function () {
     it("should register a an instance and resolved the same insatnce as the registered one", function () {
         var f2;
-        var f1 = new Foo();
+        var f1 = new Subjects.Foo();
         var container = new TSFunq.Container();
 
         container.registerInstance(f1);
-        f2 = container.resolve(Foo);
+        f2 = container.resolve(Subjects.Foo);
 
         expect(f1).toBe(f2);
     });
@@ -32,7 +32,7 @@ describe("ThrowsIfCannotResolve", function () {
         var container = new TSFunq.Container();
 
         try {
-            foo = container.resolve(Foo);
+            foo = container.resolve(Subjects.Foo);
             fail("Should have thrown ResolutionException");
         }
         catch (re) {
@@ -46,7 +46,7 @@ describe("ThrowsIfCannotResolveNamed", function () {
         var container = new TSFunq.Container();
 
         try {
-            foo = container.resolveNamed(Foo, "foo");
+            foo = container.resolveNamed(Subjects.Foo, "foo");
             fail("Should have thrown ResolutionException");
         }
         catch (re) {
@@ -60,11 +60,11 @@ describe("RegistersDelegateForType", function () {
         var foo;
         var container = new TSFunq.Container();
 
-        container.register(Foo, function (c) { return new Foo(); });
-        foo = container.resolve(Foo);
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); });
+        foo = container.resolve(Subjects.Foo);
 
         expect(foo).not.toBeNull();
-        expect(foo.constructor).toEqual(Foo);
+        expect(foo.constructor).toEqual(Subjects.Foo);
     });
 });
 
@@ -74,14 +74,14 @@ describe("RegistersNamedFactories", function () {
         var foo2;
         var container = new TSFunq.Container();
 
-        container.registerNamed(Foo, "foo", function (c) { return new Foo(); });
-        container.registerNamed(Foo, "foo2", function (c) { return new Foo(); });
-        foo = container.resolveNamed(Foo, "foo");
-        foo2 = container.resolveNamed(Foo, "foo2");
+        container.registerNamed(Subjects.Foo, "foo", function (c) { return new Subjects.Foo(); });
+        container.registerNamed(Subjects.Foo, "foo2", function (c) { return new Subjects.Foo(); });
+        foo = container.resolveNamed(Subjects.Foo, "foo");
+        foo2 = container.resolveNamed(Subjects.Foo, "foo2");
 
         expect(foo).not.toBe(foo2);
-        expect(foo.constructor).toEqual(Foo);
-        expect(foo2.constructor).toEqual(Foo);
+        expect(foo.constructor).toEqual(Subjects.Foo);
+        expect(foo2.constructor).toEqual(Subjects.Foo);
     });
 });
 
@@ -91,10 +91,10 @@ describe("RegisterOrderForNamedDoesNotMatter", function () {
         var foo2;
         var container = new TSFunq.Container();
 
-        container.register(Foo, function (c) { return new Foo(); });
-        container.registerNamed(Foo, "foo", function (c) { return new Foo("foo"); });
-        foo = container.resolve(Foo);
-        foo2 = container.resolveNamed(Foo, "foo");
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); });
+        container.registerNamed(Subjects.Foo, "foo", function (c) { return new Subjects.Foo("foo"); });
+        foo = container.resolve(Subjects.Foo);
+        foo2 = container.resolveNamed(Subjects.Foo, "foo");
 
         expect(foo).not.toBeNull();
         expect(foo2).not.toBeNull();
@@ -105,7 +105,7 @@ describe("RegisterOrderForNamedDoesNotMatter", function () {
 describe("TryResolveReturnsNullIfNotRegistered", function () {
     it("should return null and not throw a ResolutionException when type is not registered", function () {
         var container = new TSFunq.Container();
-        var foo = container.tryResolve(Foo);
+        var foo = container.tryResolve(Subjects.Foo);
 
         expect(foo).toBeNull();
     });
@@ -114,7 +114,7 @@ describe("TryResolveReturnsNullIfNotRegistered", function () {
 describe("TryResolveNamedReturnsNullIfNotRegistered", function () {
     it("should return null and not throw a ResolutionException when type is not registered", function () {
         var container = new TSFunq.Container();
-        var foo = container.tryResolveNamed(Foo, "foo");
+        var foo = container.tryResolveNamed(Subjects.Foo, "foo");
 
         expect(foo).toBeNull();
     });
@@ -125,8 +125,8 @@ describe("TryResolveReturnsRegisteredInstance", function () {
         var bar;
         var container = new TSFunq.Container();
 
-        container.registerNamed(Bar, "bar", function (c) { return new Bar(); });
-        bar = container.tryResolveNamed(Bar, "bar");
+        container.registerNamed(Subjects.Bar, "bar", function (c) { return new Subjects.Bar(); });
+        bar = container.tryResolveNamed(Subjects.Bar, "bar");
         expect(bar).not.toBeNull();
     });
 });
@@ -137,8 +137,8 @@ describe("TryResolveReturnsRegisteredInstanceOnParent", function () {
         var container = new TSFunq.Container();
         var child = container.createChildContainer();
 
-        container.registerNamed(Bar, "bar", function (c) { return new Bar(); });
-        bar = child.tryResolveNamed(Bar, "bar");
+        container.registerNamed(Subjects.Bar, "bar", function (c) { return new Subjects.Bar(); });
+        bar = child.tryResolveNamed(Subjects.Bar, "bar");
 
         expect(bar).not.toBeNull();
     });
@@ -149,9 +149,9 @@ describe("LatestRegistrationOverridesPrevious", function () {
         var foo;
         var container = new TSFunq.Container();
 
-        container.register(Foo, function (c) { return new Foo(); });
-        container.register(Foo, function (c) { return new Foo("foo"); });
-        foo = container.resolve(Foo)
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); });
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo("foo"); });
+        foo = container.resolve(Subjects.Foo)
 
         expect(foo.value).toEqual("foo");
     });
@@ -163,10 +163,10 @@ describe("DisposesContainerOwnedInstances", function () {
         var externallyOwned;
         var container = new TSFunq.Container();
 
-        container.register(Disposable, function (c) { return new Disposable(); }).ownedBy(TSFunq.Owner.container);
-        container.register(Base, function (c) { return new Disposable(); }).ownedBy(TSFunq.Owner.external);
-        containerOwned = container.resolve(Disposable);
-        externallyOwned = container.resolve(Base);
+        container.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); }).ownedBy(TSFunq.Owner.container);
+        container.register(Subjects.Base, function (c) { return new Subjects.Disposable(); }).ownedBy(TSFunq.Owner.external);
+        containerOwned = container.resolve(Subjects.Disposable);
+        externallyOwned = container.resolve(Subjects.Base);
         container.dispose();
 
         expect(containerOwned.isDisposed).toBeTruthy();
@@ -180,8 +180,8 @@ describe("ChildContainerCanReuseRegistrationsOnParent", function () {
         var container = new TSFunq.Container();
         var child = container.createChildContainer();
 
-        container.register(Foo, function (c) { return new Foo(); })
-        foo = child.resolve(Foo);
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); })
+        foo = child.resolve(Subjects.Foo);
 
         expect(foo).not.toBeNull();
     });
@@ -193,9 +193,9 @@ describe("NoReuseCreatesNewInstancesAlways", function () {
         var foo2;
         var container = new TSFunq.Container();
 
-        container.register(Foo, function (c) { return new Foo(); }).reusedWithin(TSFunq.ReuseScope.none);
-        foo1 = container.resolve(Foo);
-        foo2 = container.resolve(Foo);
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); }).reusedWithin(TSFunq.ReuseScope.none);
+        foo1 = container.resolve(Subjects.Foo);
+        foo2 = container.resolve(Subjects.Foo);
 
         expect(foo1).not.toBeNull();
         expect(foo2).not.toBeNull();
@@ -209,9 +209,9 @@ describe("ContainerScopedInstanceIsReused", function () {
         var foo2;
         var container = new TSFunq.Container();
 
-        container.register(Foo, function (c) { return new Foo(); }).reusedWithin(TSFunq.ReuseScope.container);
-        foo1 = container.resolve(Foo);
-        foo2 = container.resolve(Foo);
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); }).reusedWithin(TSFunq.ReuseScope.container);
+        foo1 = container.resolve(Subjects.Foo);
+        foo2 = container.resolve(Subjects.Foo);
 
         expect(foo1).not.toBeNull();
         expect(foo2).not.toBeNull();
@@ -225,9 +225,9 @@ describe("HierarchyScopedInstanceIsReusedOnSameContainer", function () {
         var foo2;
         var container = new TSFunq.Container();
 
-        container.register(Foo, function (c) { return new Foo(); }).reusedWithin(TSFunq.ReuseScope.hierarchy);
-        foo1 = container.resolve(Foo);
-        foo2 = container.resolve(Foo);
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); }).reusedWithin(TSFunq.ReuseScope.hierarchy);
+        foo1 = container.resolve(Subjects.Foo);
+        foo2 = container.resolve(Subjects.Foo);
 
         expect(foo1).not.toBeNull();
         expect(foo2).not.toBeNull();
@@ -242,9 +242,9 @@ describe("HierarchyScopedInstanceIsReusedFromParentContainer", function () {
         var parent = new TSFunq.Container();
         var child = parent.createChildContainer();
 
-        parent.register(Foo, function (c) { return new Foo(); }).reusedWithin(TSFunq.ReuseScope.hierarchy);
-        foo1 = parent.resolve(Foo);
-        foo2 = child.resolve(Foo);
+        parent.register(Subjects.Foo, function (c) { return new Subjects.Foo(); }).reusedWithin(TSFunq.ReuseScope.hierarchy);
+        foo1 = parent.resolve(Subjects.Foo);
+        foo2 = child.resolve(Subjects.Foo);
 
         expect(foo1).not.toBeNull();
         expect(foo2).not.toBeNull();
@@ -259,9 +259,9 @@ describe("HierarchyScopedInstanceIsCreatedOnRegistrationContainer", function () 
         var parent = new TSFunq.Container();
         var child = parent.createChildContainer();
 
-        parent.register(Disposable, function (c) { return new Disposable(); }).reusedWithin(TSFunq.ReuseScope.hierarchy);
-        childFoo = child.resolve(Disposable);
-        parentFoo = parent.resolve(Disposable);
+        parent.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); }).reusedWithin(TSFunq.ReuseScope.hierarchy);
+        childFoo = child.resolve(Subjects.Disposable);
+        parentFoo = parent.resolve(Subjects.Disposable);
         child.dispose();
 
         expect(parentFoo).not.toBeNull();
@@ -277,9 +277,9 @@ describe("ContainerScopedInstanceIsNotReusedFromParentContainer", function () {
         var parent = new TSFunq.Container();
         var child = parent.createChildContainer();
 
-        parent.register(Foo, function (c) { return new Foo(); }).reusedWithin(TSFunq.ReuseScope.container);
-        foo1 = parent.resolve(Foo);
-        foo2 = child.resolve(Foo);
+        parent.register(Subjects.Foo, function (c) { return new Subjects.Foo(); }).reusedWithin(TSFunq.ReuseScope.container);
+        foo1 = parent.resolve(Subjects.Foo);
+        foo2 = child.resolve(Subjects.Foo);
 
         expect(foo1).not.toBeNull();
         expect(foo2).not.toBeNull();
@@ -293,10 +293,10 @@ describe("DisposingParentContainerDisposesChildContainerAndInstances", function 
         var parent = new TSFunq.Container();
         var child = parent.createChildContainer();
 
-        parent.register(Disposable, function (c) { return new Disposable(); }).reusedWithin(TSFunq.Owner.hierarchy);
-        parent.register(Base, function (c) { return new Disposable(); }).reusedWithin(TSFunq.Owner.container);
-        parentFoo = parent.resolve(Disposable);
-        childFoo = child.resolve(Base);
+        parent.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); }).reusedWithin(TSFunq.Owner.hierarchy);
+        parent.register(Subjects.Base, function (c) { return new Subjects.Disposable(); }).reusedWithin(TSFunq.Owner.container);
+        parentFoo = parent.resolve(Subjects.Disposable);
+        childFoo = child.resolve(Subjects.Base);
         parent.dispose();
 
         expect(parentFoo.isDisposed).toBeTruthy();
@@ -309,11 +309,11 @@ describe("ContainerOwnedNonReuseInstacesAreDisposed", function () {
         var foo;
         var container = new TSFunq.Container();
 
-        container.register(Disposable, function (c) { return new Disposable(); })
+        container.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); })
                  .reusedWithin(TSFunq.ReuseScope.none)
                  .ownedBy(TSFunq.Owner.container);
 
-        foo = container.resolve(Disposable);
+        foo = container.resolve(Subjects.Disposable);
         container.dispose();
 
         expect(foo.isDisposed).toBeTruthy();
@@ -325,11 +325,11 @@ describe("ContainerOwnedAndContainerReusedInstacesAreDisposed", function () {
         var foo;
         var container = new TSFunq.Container();
 
-        container.register(Disposable, function (c) { return new Disposable(); })
+        container.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); })
                  .reusedWithin(TSFunq.ReuseScope.container)
                  .ownedBy(TSFunq.Owner.container);
 
-        foo = container.resolve(Disposable);
+        foo = container.resolve(Subjects.Disposable);
         container.dispose();
 
         expect(foo.isDisposed).toBeTruthy();
@@ -341,11 +341,11 @@ describe("ContainerOwnedAndHierarchyReusedInstacesAreDisposed", function () {
         var foo;
         var container = new TSFunq.Container();
 
-        container.register(Disposable, function (c) { return new Disposable(); })
+        container.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); })
                  .reusedWithin(TSFunq.ReuseScope.hierarchy)
                  .ownedBy(TSFunq.Owner.container);
 
-        foo = container.resolve(Disposable);
+        foo = container.resolve(Subjects.Disposable);
         container.dispose();
 
         expect(foo.isDisposed).toBeTruthy();
@@ -358,11 +358,11 @@ describe("ChildContainerInstanceWithParentRegistrationIsDisposed", function () {
         var parent = new TSFunq.Container();
         var child = parent.createChildContainer();
 
-        parent.register(Disposable, function (c) { return new Disposable(); })
+        parent.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); })
               .reusedWithin(TSFunq.ReuseScope.hierarchy)
               .ownedBy(TSFunq.Owner.container);
 
-        foo = child.resolve(Disposable);
+        foo = child.resolve(Subjects.Disposable);
         child.dispose();
 
         expect(foo.isDisposed).toBeFalsy();
@@ -375,11 +375,11 @@ describe("DisposingParentContainerDisposesChildContainerInstances", function () 
         var parent = new TSFunq.Container();
         var child = parent.createChildContainer();
 
-        parent.register(Disposable, function (c) { return new Disposable(); })
+        parent.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); })
               .reusedWithin(TSFunq.ReuseScope.none)
               .ownedBy(TSFunq.Owner.container);
 
-        foo = child.resolve(Disposable);
+        foo = child.resolve(Subjects.Disposable);
         parent.dispose();
 
         expect(foo.isDisposed).toBeTruthy();
@@ -391,11 +391,11 @@ describe("DisposingContainerDoesNotDisposeExternalOwnedInstances", function () {
         var foo;
         var container = new TSFunq.Container();
 
-        container.register(Disposable, function (c) { return new Disposable(); })
+        container.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); })
                  .reusedWithin(TSFunq.ReuseScope.hierarchy)
                  .ownedBy(TSFunq.Owner.external);
 
-        foo = container.resolve(Disposable);
+        foo = container.resolve(Subjects.Disposable);
         container.dispose();
 
         expect(foo.isDisposed).toBeFalsy();
@@ -408,12 +408,12 @@ describe("InitializerCalledWhenInstanceCreatedContainerReuse", function () {
         var i2;
         var container = new TSFunq.Container();
 
-        container.register(Initializable, function (c) { return new Initializable(); })
+        container.register(Subjects.Initializable, function (c) { return new Subjects.Initializable(); })
                  .initializedBy(function (c, i) { i.initialize(); })
                  .reusedWithin(TSFunq.ReuseScope.container);
 
-        i1 = container.resolve(Initializable);
-        i2 = container.resolve(Initializable);
+        i1 = container.resolve(Subjects.Initializable);
+        i2 = container.resolve(Subjects.Initializable);
 
         expect(i1).toBe(i2);
         expect(1).toEqual(i1.initializeCalls);
@@ -426,12 +426,12 @@ describe("InitializerCalledWhenInstanceCreatedHierarchyReuse", function () {
         var i2;
         var container = new TSFunq.Container();
 
-        container.register(Initializable, function (c) { return new Initializable(); })
+        container.register(Subjects.Initializable, function (c) { return new Subjects.Initializable(); })
                  .initializedBy(function (c, i) { i.initialize(); })
                  .reusedWithin(TSFunq.ReuseScope.hierarchy);
 
-        i1 = container.resolve(Initializable);
-        i2 = container.resolve(Initializable);
+        i1 = container.resolve(Subjects.Initializable);
+        i2 = container.resolve(Subjects.Initializable);
 
         expect(i1).toBe(i2);
         expect(1).toEqual(i1.initializeCalls);
@@ -444,12 +444,12 @@ describe("InitializerCalledWhenInstanceCreatedNoReuse", function () {
         var i2;
         var container = new TSFunq.Container();
 
-        container.register(Initializable, function (c) { return new Initializable(); })
+        container.register(Subjects.Initializable, function (c) { return new Subjects.Initializable(); })
                  .initializedBy(function (c, i) { i.initialize(); })
                  .reusedWithin(TSFunq.ReuseScope.none);
 
-        i1 = container.resolve(Initializable);
-        i2 = container.resolve(Initializable);
+        i1 = container.resolve(Subjects.Initializable);
+        i2 = container.resolve(Subjects.Initializable);
 
         expect(i1).not.toBe(i2);
         expect(1).toEqual(i1.initializeCalls);
@@ -464,12 +464,12 @@ describe("InitializerCalledOnChildContainerWhenInstanceCreated", function () {
         var container = new TSFunq.Container();
         var child = container.createChildContainer();
 
-        container.register(Initializable, function (c) { return new Initializable(); })
+        container.register(Subjects.Initializable, function (c) { return new Subjects.Initializable(); })
                  .initializedBy(function (c, i) { i.initialize(); })
                  .reusedWithin(TSFunq.ReuseScope.container);
 
-        i1 = child.resolve(Initializable);
-        i2 = child.resolve(Initializable);
+        i1 = child.resolve(Subjects.Initializable);
+        i2 = child.resolve(Subjects.Initializable);
 
         expect(i1).toBe(i2);
         expect(1).toEqual(i1.initializeCalls);
@@ -482,12 +482,12 @@ describe("InitializerCanRetrieveResolvedDependency", function () {
         var presenter;
         var container = new TSFunq.Container();
 
-        container.register(Presenter, function (c) { return new Presenter(c.resolve(View)); })
-        container.register(View, function (c) { return new View(); })
-                 .initializedBy(function (c, v) { v.presenter = c.resolve(Presenter); });
+        container.register(Subjects.Presenter, function (c) { return new Subjects.Presenter(c.resolve(Subjects.View)); })
+        container.register(Subjects.View, function (c) { return new Subjects.View(); })
+                 .initializedBy(function (c, v) { v.presenter = c.resolve(Subjects.Presenter); });
 
-        view = container.resolve(View);
-        presenter = container.resolve(Presenter);
+        view = container.resolve(Subjects.View);
+        presenter = container.resolve(Subjects.Presenter);
 
         expect(view.presenter).toBe(presenter);
     });
@@ -505,14 +505,14 @@ describe("InitializerCalledOnEntryContainer", function () {
         // initializer should NOT be able to resolve 
         // the presenter, which lives in the child container.
 
-        container.register(View, function (c) { return new View(); })
-                 .initializedBy(function (c, v) { v.presenter = c.resolve(Presenter); })
+        container.register(Subjects.View, function (c) { return new Subjects.View(); })
+                 .initializedBy(function (c, v) { v.presenter = c.resolve(Subjects.Presenter); })
                  .reusedWithin(TSFunq.ReuseScope.hierarchy);
 
-        child.register(Presenter, function (c) { return new Presenter(c.resolve(View)); });
+        child.register(Subjects.Presenter, function (c) { return new Subjects.Presenter(c.resolve(Subjects.View)); });
 
         try {
-            view = child.resolve(View);
+            view = child.resolve(Subjects.View);
             fail("Should have thrown as presenter is registered on child and initializer runs on parent");
         }
         catch (ResolutionException) {
@@ -570,22 +570,22 @@ describe("DefaultReuseCanBeSpecified", function () {
         var container = new TSFunq.Container();
 
         container.defaultReuse = TSFunq.ReuseScope.none;
-        container.register(Foo, function (c) { return new Foo(); });
-        f1 = container.resolve(Foo);
-        f2 = container.resolve(Foo);
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); });
+        f1 = container.resolve(Subjects.Foo);
+        f2 = container.resolve(Subjects.Foo);
 
         expect(f1).not.toBe(f2);
     });
 });
 
 describe("DefaultOwnerCanBeSpecified", function () {
-    it("should register a disposable type factory, set the defaultOwner to external, call the dispose function and the resolved instance should not be not be disposed",function () {
+    it("should register a disposable type factory, set the defaultOwner to external, call the dispose function and the resolved instance should not be not be disposed", function () {
         var d;
         var container = new TSFunq.Container();
 
         container.defaultOwner = TSFunq.Owner.external;
-        container.register(Disposable, function (c) { return new Disposable(); });
-        d = container.resolve(Disposable);
+        container.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); });
+        d = container.resolve(Subjects.Disposable);
         container.dispose();
 
         expect(d.isDisposed).toBeFalsy();
@@ -597,10 +597,10 @@ describe("LazyResolveProvidedForRegisteredServices", function () {
         var func;
         var container = new TSFunq.Container();
 
-        container.register(Foo, function (c) { return new Foo(); })
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); })
                  .reusedWithin(TSFunq.ReuseScope.container);
 
-        func = container.lazyResolve(Foo);
+        func = container.lazyResolve(Subjects.Foo);
 
         expect(func).not.toBeNull();
     });
@@ -613,10 +613,10 @@ describe("LazyResolveHonorsReuseScope", function () {
         var func;
         var container = new TSFunq.Container();
 
-        container.register(Foo, function (c) { return new Foo(); })
+        container.register(Subjects.Foo, function (c) { return new Subjects.Foo(); })
                  .reusedWithin(TSFunq.ReuseScope.container);
 
-        func = container.lazyResolve(Foo);
+        func = container.lazyResolve(Subjects.Foo);
         f1 = func();
         f2 = func();
 
@@ -630,10 +630,10 @@ describe("LazyResolveNamed", function () {
         var bar;
         var container = new TSFunq.Container();
 
-        container.registerNamed(Foo, "foo", function (c) { return new Foo("foo"); });
-        container.registerNamed(Foo, "bar", function (c) { return new Foo("bar"); });
-        foo = container.lazyResolveNamed(Foo, "foo");
-        bar = container.lazyResolveNamed(Foo, "bar");
+        container.registerNamed(Subjects.Foo, "foo", function (c) { return new Subjects.Foo("foo"); });
+        container.registerNamed(Subjects.Foo, "bar", function (c) { return new Subjects.Foo("bar"); });
+        foo = container.lazyResolveNamed(Subjects.Foo, "foo");
+        bar = container.lazyResolveNamed(Subjects.Foo, "bar");
 
         expect(foo).not.toBeNull();
         expect(bar).not.toBeNull();
@@ -647,7 +647,7 @@ describe("LazyResolveThrowsIfNotRegistered", function () {
         var container = new TSFunq.Container();
 
         try {
-            container.lazyResolve(Foo);
+            container.lazyResolve(Subjects.Foo);
             fail("Should have failed to resolve the lazy func");
         }
         catch (ResolutionException) {
@@ -660,7 +660,7 @@ describe("LazyResolveNamedThrowsIfNotRegistered", function () {
         var container = new TSFunq.Container();
 
         try {
-            container.lazyResolve(Foo, "foo");
+            container.lazyResolve(Subjects.Foo, "foo");
             fail("Should have failed to resolve the lazy func");
         }
         catch (ResolutionException) {
