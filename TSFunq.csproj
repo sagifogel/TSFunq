@@ -30,9 +30,13 @@
   <ItemGroup>
     <TypeScriptCompile Include="aliasing\Func.ts" />
     <TypeScriptCompile Include="src\Container.ts" />
+    <TypeScriptCompile Include="src\RegistrationException.ts" />
     <TypeScriptCompile Include="src\Dictionary.ts" />
     <TypeScriptCompile Include="src\EquatbaleString.ts" />
+    <TypeScriptCompile Include="src\IContainer.ts" />
+    <TypeScriptCompile Include="src\IRegistrationResolver.ts" />
     <TypeScriptCompile Include="src\IHashable.ts" />
+    <TypeScriptCompile Include="src\IRegistry.ts" />
     <TypeScriptCompile Include="src\ResolutionException.ts" />
     <TypeScriptCompile Include="src\GenericServiceEntry.ts" />
     <TypeScriptCompile Include="src\IDisposable.ts" />

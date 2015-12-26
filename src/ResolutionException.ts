@@ -15,7 +15,7 @@ module TSFunq {
                 buffer.push(missingServiceName);
             }
 
-            buffer.push(" could not be resolved");
+            buffer.push(" could not be resolved.");
             this.message = buffer.join("");
         }
     }

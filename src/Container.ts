@@ -76,7 +76,13 @@ module TSFunq {
 
         registerImpl<TService, TFunc>(ctor: new () => TService, name: string, factory: TFunc): GenericServiceEntry<TService, TFunc> {
             var key: ServiceKey;
-            var entry = GenericServiceEntry.build<TService, TFunc>({
+            var entry: GenericServiceEntry<TService, TFunc>;
+
+            if (<Function>ctor === Container) {
+                throw new RegistrationException("Container service is built-in and read-only.");
+            }
+
+            entry = GenericServiceEntry.build<TService, TFunc>({
                 container: this,
                 factory: factory,
                 reuse: this.defaultReuse,

@@ -54,7 +54,7 @@ var TSFunq;
                 buffer.push(" named ");
                 buffer.push(missingServiceName);
             }
-            buffer.push(" could not be resolved");
+            buffer.push(" could not be resolved.");
             this.message = buffer.join("");
         }
         return ResolutionException;
@@ -312,7 +312,11 @@ var TSFunq;
         };
         Container.prototype.registerImpl = function (ctor, name, factory) {
             var key;
-            var entry = TSFunq.GenericServiceEntry.build({
+            var entry;
+            if (ctor === Container) {
+                throw new TSFunq.RegistrationException("Container service is built-in and read-only.");
+            }
+            entry = TSFunq.GenericServiceEntry.build({
                 container: this,
                 factory: factory,
                 reuse: this.defaultReuse,
@@ -392,4 +396,16 @@ var TSFunq;
         return Container;
     })();
     TSFunq.Container = Container;
+})(TSFunq || (TSFunq = {}));
+/// <reference path="nameresolver.ts" />
+var TSFunq;
+(function (TSFunq) {
+    var RegistrationException = (function () {
+        function RegistrationException(message) {
+            this.message = message;
+            this.name = "RegistrationException";
+        }
+        return RegistrationException;
+    })();
+    TSFunq.RegistrationException = RegistrationException;
 })(TSFunq || (TSFunq = {}));

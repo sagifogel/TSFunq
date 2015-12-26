@@ -519,14 +519,14 @@ describe("InitializerCalledOnEntryContainer", function () {
         }
     });
 });
-/*
+
 describe("ThrowsIfRegisterContainerService", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should not register a container factory/instance and throw a RegistrationException", function () {
         var view;
         var container = new TSFunq.Container();
 
         try {
-            container.register(function (c) { return new TSFunq.Container() });
+            container.register(TSFunq.Container, function (c) { return new TSFunq.Container() });
             fail("Should have thrown when registering a Container service.");
         }
         catch (ArgumentException) {
@@ -535,7 +535,7 @@ describe("ThrowsIfRegisterContainerService", function () {
 });
 
 describe("ShouldGetContainerServiceAlways", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should resolve a container without a registration", function () {
         var view;
         var container = new TSFunq.Container();
         var service = container.resolve(TSFunq.Container);
@@ -545,7 +545,7 @@ describe("ShouldGetContainerServiceAlways", function () {
 });
 
 describe("ShouldGetSameContainerServiceAsCurrentContainer", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should resolve the a different instance of container for each new container", function () {
         var view;
         var service;
         var container = new TSFunq.Container();
@@ -553,47 +553,47 @@ describe("ShouldGetSameContainerServiceAsCurrentContainer", function () {
         var grandChild = child.createChildContainer();
 
         service = container.resolve(TSFunq.Container);
-        expect(container).toBeEqual(service);
+        expect(container).toBe(service);
 
         service = child.resolve(TSFunq.Container);
-        expect(child).toBeEqual(service);
+        expect(child).toBe(service);
 
         service = grandChild.resolve(TSFunq.Container);
-        expect(grandChild).toBeEqual(service);
+        expect(grandChild).toBe(service);
     });
 });
 
 describe("DefaultReuseCanBeSpecified", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should resolve different instances of a type after setting the defaultReuse to 'none'", function () {
         var f1;
         var f2
         var container = new TSFunq.Container();
 
         container.defaultReuse = TSFunq.ReuseScope.none;
-        container.Register(Foo, function (c) { return new Foo(); });
+        container.register(Foo, function (c) { return new Foo(); });
         f1 = container.resolve(Foo);
         f2 = container.resolve(Foo);
 
-        expect(f1).not.toBeEqual(f2);
+        expect(f1).not.toBe(f2);
     });
 });
 
 describe("DefaultOwnerCanBeSpecified", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a disposable type factory, set the defaultOwner to external, call the dispose function and the resolved instance should not be not be disposed",function () {
         var d;
         var container = new TSFunq.Container();
 
         container.defaultOwner = TSFunq.Owner.external;
-        container.Register(Disposable, function (c) { return new Disposable(); });
+        container.register(Disposable, function (c) { return new Disposable(); });
         d = container.resolve(Disposable);
         container.dispose();
 
-        expect(d.isDisposed).toBeFalse();
+        expect(d.isDisposed).toBeFalsy();
     });
 });
 
 describe("LazyResolveProvidedForRegisteredServices", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory that is reused by container and should be able to resolve a factory (lazy resolve)", function () {
         var func;
         var container = new TSFunq.Container();
 
@@ -607,7 +607,7 @@ describe("LazyResolveProvidedForRegisteredServices", function () {
 });
 
 describe("LazyResolveHonorsReuseScope", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory that is reused by container, resolve a factory using lazResolve and call this factory multiple times and resolve the same instance", function () {
         var f1;
         var f2;
         var func;
@@ -620,30 +620,30 @@ describe("LazyResolveHonorsReuseScope", function () {
         f1 = func();
         f2 = func();
 
-        expect(f1).toBeEqual(f2);
+        expect(f1).toBe(f2);
     });
 });
 
 describe("LazyResolveNamed", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register two named factories, resolve two different facotries using lazyResolve, and call each facotry and resolve the expected instance", function () {
         var foo;
         var bar;
         var container = new TSFunq.Container();
 
-        container.register(Foo, "foo", function (c) { return new Foo("foo"); });
-        container.register(Foo, "bar", function (c) { return new Foo("bar"); });
+        container.registerNamed(Foo, "foo", function (c) { return new Foo("foo"); });
+        container.registerNamed(Foo, "bar", function (c) { return new Foo("bar"); });
         foo = container.lazyResolveNamed(Foo, "foo");
         bar = container.lazyResolveNamed(Foo, "bar");
 
         expect(foo).not.toBeNull();
         expect(bar).not.toBeNull();
-        expect("foo").toBeEqual(foo.value);
-        expect("bar").toBeEqual(bar.value);
+        expect("foo").toEqual(foo().value);
+        expect("bar").toEqual(bar().value);
     });
 });
 
 describe("LazyResolveThrowsIfNotRegistered", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should throw a ResolutionException when type is not registered and resolved through lazyResolve", function () {
         var container = new TSFunq.Container();
 
         try {
@@ -656,7 +656,7 @@ describe("LazyResolveThrowsIfNotRegistered", function () {
 });
 
 describe("LazyResolveNamedThrowsIfNotRegistered", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should throw a ResolutionException when type is not registered and resolved through lazyResolveNamed", function () {
         var container = new TSFunq.Container();
 
         try {
@@ -667,4 +667,3 @@ describe("LazyResolveNamedThrowsIfNotRegistered", function () {
         }
     });
 });
-*/
