@@ -10,7 +10,7 @@
 /// <reference path="resolutionexception.ts" />
 
 module TSFunq {
-    export class Container implements IContainer, IDisposable {
+    export class Container implements IContainer {
         private parent: Container;
         private defaultOwner = Owner.container;
         private defaultReuse = ReuseScope.container;
@@ -56,7 +56,7 @@ module TSFunq {
         }
 
         registerInstance<TService extends Function>(instance: TService): void {
-            return this.registerNamedInstance<TService>(null, instance);
+            this.registerNamedInstance<TService>(null, instance);
         }
 
         registerNamedInstance<TService extends Function>(name: string, instance: TService): void {
