@@ -241,7 +241,10 @@ var TSFunq;
             }
         }
         ServiceKey.prototype.equals = function (obj) {
-            return obj.getHashCode() === this.getHashCode();
+            if (obj && obj.getHashCode) {
+                return obj.getHashCode() === this.getHashCode();
+            }
+            return false;
         };
         ServiceKey.prototype.getHashCode = function () {
             return this.hash;

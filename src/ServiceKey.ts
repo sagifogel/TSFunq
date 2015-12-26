@@ -19,7 +19,11 @@ module TSFunq {
         }
 
         equals(obj: ServiceKey): boolean {
-            return obj.getHashCode() === this.getHashCode();
+            if (obj && obj.getHashCode) {
+                return obj.getHashCode() === this.getHashCode();
+            }
+
+            return false;
         }
 
         getHashCode(): number {
