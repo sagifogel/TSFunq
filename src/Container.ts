@@ -51,15 +51,15 @@ module TSFunq {
             }
         }
 
-        register<TService extends Function>(ctor: { new (): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
+        register<TService>(ctor: { new (): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
             return this.registerNamed(ctor, null, factory);
         }
 
-        registerInstance<TService extends Function>(instance: TService): void {
+        registerInstance<TService>(instance: TService): void {
             this.registerNamedInstance<TService>(null, instance);
         }
 
-        registerNamedInstance<TService extends Function>(name: string, instance: TService): void {
+        registerNamedInstance<TService>(name: string, instance: TService): void {
             var proto = Object.getPrototypeOf(instance);
             var ctor = <new () => TService>proto.constructor;
             var entry = this.registerImpl<TService, Func<Container, TService>>(ctor, name, null);
@@ -70,7 +70,7 @@ module TSFunq {
             entry.initializeInstance(instance);
         }
 
-        registerNamed<TService extends Function>(ctor: { new (): TService; }, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
+        registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
             return this.registerImpl<TService, Func<Container, TService>>(ctor, name, factory);
         }
 
@@ -95,27 +95,27 @@ module TSFunq {
             return entry;
         }
 
-        resolve<TService extends Function>(ctor: new () => TService): TService {
+        resolve<TService>(ctor: new () => TService): TService {
             return this.resolveNamed<TService>(ctor, null);
         }
 
-        resolveNamed<TService extends Function>(ctor: new () => TService, name: string): TService {
+        resolveNamed<TService>(ctor: new () => TService, name: string): TService {
             return this.resolveImpl<TService>(ctor, name, true);
         }
 
-        tryResolve<TService extends Function>(ctor: new () => TService): TService {
+        tryResolve<TService>(ctor: new () => TService): TService {
             return this.tryResolveNamed<TService>(ctor, null);
         }
 
-        tryResolveNamed<TService extends Function>(ctor: new () => TService, name: string): TService {
+        tryResolveNamed<TService>(ctor: new () => TService, name: string): TService {
             return this.resolveImpl<TService>(ctor, name, false);
         }
 
-        lazyResolve<TService extends Function>(ctor: new () => TService): () => TService {
+        lazyResolve<TService>(ctor: new () => TService): () => TService {
             return this.lazyResolveNamed<TService>(ctor, null);
         }
 
-        lazyResolveNamed<TService extends Function>(ctor: new () => TService, name: string): () => TService {
+        lazyResolveNamed<TService>(ctor: new () => TService, name: string): () => TService {
             this.throwIfNotRegistered<TService, Func<Container, TService>>(ctor, name);
 
             return () => this.resolveNamed<TService>(ctor, name);

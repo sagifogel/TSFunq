@@ -300,7 +300,7 @@ var TSFunq;
             return this.registerNamed(ctor, null, factory);
         };
         Container.prototype.registerInstance = function (instance) {
-            return this.registerNamedInstance(null, instance);
+            this.registerNamedInstance(null, instance);
         };
         Container.prototype.registerNamedInstance = function (name, instance) {
             var proto = Object.getPrototypeOf(instance);
