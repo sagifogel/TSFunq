@@ -28,26 +28,19 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="aliasing\Func.ts" />
     <TypeScriptCompile Include="src\Container.ts" />
     <TypeScriptCompile Include="src\RegistrationException.ts" />
     <TypeScriptCompile Include="src\Dictionary.ts" />
     <TypeScriptCompile Include="src\EquatbaleString.ts" />
-    <TypeScriptCompile Include="src\IContainer.ts" />
-    <TypeScriptCompile Include="src\IRegistrationResolver.ts" />
-    <TypeScriptCompile Include="src\IHashable.ts" />
-    <TypeScriptCompile Include="src\IRegistry.ts" />
     <TypeScriptCompile Include="src\ResolutionException.ts" />
     <TypeScriptCompile Include="src\GenericServiceEntry.ts" />
-    <TypeScriptCompile Include="src\IDisposable.ts" />
-    <TypeScriptCompile Include="src\IEquatable.ts" />
     <TypeScriptCompile Include="src\NameResolver.ts" />
-    <TypeScriptCompile Include="src\Owner.ts" />
-    <TypeScriptCompile Include="src\ReuseScope.ts" />
-    <TypeScriptCompile Include="src\ServiceEnrty.ts" />
+    <TypeScriptCompile Include="src\ServiceEntry.ts" />
     <TypeScriptCompile Include="src\ServiceKey.ts" />
     <TypeScriptCompile Include="src\Stack.ts" />
-    <TypeScriptCompile Include="src\Syntax.ts" />
+    <TypeScriptCompile Include="src\TSFunq.ts" />
+    <TypeScriptCompile Include="type_definitions\interfaces.d.ts" />
+    <TypeScriptCompile Include="type_definitions\TSFunq.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="package.json" />
@@ -91,7 +84,7 @@
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind>None</TypeScriptModuleKind>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
     <TypeScriptOutFile>build\TSFunq.js</TypeScriptOutFile>
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>

@@ -1,22 +1,19 @@
-﻿/// <reference path="nameresolver.ts" />
+﻿import {NameResolver} from "./NameResolver";
 
-module TSFunq {
-    export class ResolutionException implements Error {
-        public message: string;
-        public name: string = "ResolutionException";
+class ResolutionException implements Error {
+    public message: string;
+    public name: string = "ResolutionException";
 
-        constructor(ctor: Function, missingServiceName?: string) {
-            var buffer: Array<string> = ["Required dependency of type "];
+    constructor(ctor: Function, missingServiceName?: string) {
+        var buffer: Array<string> = [`Required dependency of type ${NameResolver.resolve(ctor)}`];
 
-            buffer.push(NameResolver.resolve(ctor));
-
-            if (missingServiceName) {
-                buffer.push(" named ");
-                buffer.push(missingServiceName);
-            }
-
-            buffer.push(" could not be resolved.");
-            this.message = buffer.join("");
+        if (missingServiceName) {
+            buffer.push(` named ${missingServiceName}`);
         }
+
+        buffer.push(" could not be resolved.");
+        this.message = buffer.join("");
     }
 }
+
+export {ResolutionException}

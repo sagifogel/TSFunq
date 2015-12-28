@@ -1,26 +1,24 @@
-﻿/// <reference path="iequatable.ts" />
+﻿class EquatbaleString implements IEquatable<EquatbaleString> {
+    constructor(private value: string) {
+    }
 
-module TSFunq {
-    export class EquatbaleString implements IEquatable<EquatbaleString> {
-        constructor(private value: string) {
+    public equals(other: EquatbaleString): boolean {
+        return this.getHashCode() === other.getHashCode();
+    }
+
+    public getHashCode(): number {
+        var val = this.value,
+            hash = 0,
+            i = 0,
+            len = val.length,
+            chr;
+
+        while (i < len) {
+            hash = ((hash << 5) - hash + val.charCodeAt(i++)) << 0;
         }
 
-        public equals(other: EquatbaleString): boolean {
-            return this.getHashCode() === other.getHashCode();
-        }
-
-        public getHashCode(): number {
-            var val = this.value,
-                hash = 0,
-                i = 0,
-                len = val.length,
-                chr;
-
-            while (i < len) {
-                hash = ((hash << 5) - hash + val.charCodeAt(i++)) << 0;
-            }
-
-            return hash;
-        }
+        return hash;
     }
 }
+
+export {EquatbaleString }
