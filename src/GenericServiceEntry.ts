@@ -13,7 +13,7 @@ module TSFunq {
             super();
         }
 
-        initializeInstance(instance: TService): void {
+        public initializeInstance(instance: TService): void {
             var dynamicInstance: any = instance;
 
             if (this.reuse !== ReuseScope.none) {
@@ -29,12 +29,12 @@ module TSFunq {
             }
         }
 
-        initializedBy(initializer: Action<Container, TService>): IReusedOwned {
+        public initializedBy(initializer: Action<Container, TService>): IReusedOwned {
             this.initializer = initializer;
             return this;
         }
 
-        cloneFor(newContainer: Container): GenericServiceEntry<TService, TFunc> {
+        public cloneFor(newContainer: Container): GenericServiceEntry<TService, TFunc> {
             return GenericServiceEntry.build<TService, TFunc>({
                 reuse: this.reuse,
                 owner: this.owner,

@@ -5,11 +5,11 @@ module TSFunq {
         constructor(private value: string) {
         }
 
-        equals(other: EquatbaleString): boolean {
+        public equals(other: EquatbaleString): boolean {
             return this.getHashCode() === other.getHashCode();
         }
 
-        getHashCode(): number {
+        public getHashCode(): number {
             var val = this.value,
                 hash = 0,
                 i = 0,

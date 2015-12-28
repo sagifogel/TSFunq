@@ -30,7 +30,7 @@ module TSFunq {
             this.services.add(new ServiceKey(Container), serviceEntry);
         }
 
-        createChildContainer(): Container {
+        public createChildContainer(): Container {
             var child = new Container();
 
             child.parent = this;
@@ -39,7 +39,7 @@ module TSFunq {
             return child;
         }
 
-        dispose(): void {
+        public dispose(): void {
             while (this.disposables.length > 0) {
                 let disposable = this.disposables.pop();
 
@@ -51,15 +51,15 @@ module TSFunq {
             }
         }
 
-        register<TService>(ctor: { new (): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
+        public register<TService>(ctor: { new (): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
             return this.registerNamed(ctor, null, factory);
         }
 
-        registerInstance<TService>(instance: TService): void {
+        public registerInstance<TService>(instance: TService): void {
             this.registerNamedInstance<TService>(null, instance);
         }
 
-        registerNamedInstance<TService>(name: string, instance: TService): void {
+        public registerNamedInstance<TService>(name: string, instance: TService): void {
             var proto = Object.getPrototypeOf(instance);
             var ctor = <new () => TService>proto.constructor;
             var entry = this.registerImpl<TService, Func<Container, TService>>(ctor, name, null);
@@ -70,11 +70,11 @@ module TSFunq {
             entry.initializeInstance(instance);
         }
 
-        registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
+        public registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
             return this.registerImpl<TService, Func<Container, TService>>(ctor, name, factory);
         }
 
-        registerImpl<TService, TFunc>(ctor: new () => TService, name: string, factory: TFunc): GenericServiceEntry<TService, TFunc> {
+        private registerImpl<TService, TFunc>(ctor: new () => TService, name: string, factory: TFunc): GenericServiceEntry<TService, TFunc> {
             var key: ServiceKey;
             var entry: GenericServiceEntry<TService, TFunc>;
 
@@ -95,33 +95,33 @@ module TSFunq {
             return entry;
         }
 
-        resolve<TService>(ctor: new () => TService): TService {
+        public resolve<TService>(ctor: new () => TService): TService {
             return this.resolveNamed<TService>(ctor, null);
         }
 
-        resolveNamed<TService>(ctor: new () => TService, name: string): TService {
+        public resolveNamed<TService>(ctor: new () => TService, name: string): TService {
             return this.resolveImpl<TService>(ctor, name, true);
         }
 
-        tryResolve<TService>(ctor: new () => TService): TService {
+        public tryResolve<TService>(ctor: new () => TService): TService {
             return this.tryResolveNamed<TService>(ctor, null);
         }
 
-        tryResolveNamed<TService>(ctor: new () => TService, name: string): TService {
+        public tryResolveNamed<TService>(ctor: new () => TService, name: string): TService {
             return this.resolveImpl<TService>(ctor, name, false);
         }
 
-        lazyResolve<TService>(ctor: new () => TService): () => TService {
+        public lazyResolve<TService>(ctor: new () => TService): () => TService {
             return this.lazyResolveNamed<TService>(ctor, null);
         }
 
-        lazyResolveNamed<TService>(ctor: new () => TService, name: string): () => TService {
+        public lazyResolveNamed<TService>(ctor: new () => TService, name: string): () => TService {
             this.throwIfNotRegistered<TService, Func<Container, TService>>(ctor, name);
 
             return () => this.resolveNamed<TService>(ctor, name);
         }
 
-        resolveImpl<TService>(ctor: new () => TService, name: string, throwIfMissing: boolean): TService {
+        private resolveImpl<TService>(ctor: new () => TService, name: string, throwIfMissing: boolean): TService {
             var instance: TService;
             var entry = this.getEntry<TService, Func<Container, TService>>(ctor, name, throwIfMissing);
 
@@ -139,7 +139,7 @@ module TSFunq {
             return instance;
         }
 
-        getEntry<TService, TFunc>(ctor: new () => TService, serviceName: string, throwIfMissing: boolean): GenericServiceEntry<TService, TFunc> {
+        private getEntry<TService, TFunc>(ctor: new () => TService, serviceName: string, throwIfMissing: boolean): GenericServiceEntry<TService, TFunc> {
             var container: Container = this;
             var entry: ServiceEntry;
             var key = new ServiceKey(ctor, serviceName);
@@ -164,7 +164,7 @@ module TSFunq {
             return <GenericServiceEntry<TService, TFunc>>entry;
         }
 
-        static throwMissing<TService>(ctor: new () => TService, serviceName: string): void {
+        private static throwMissing<TService>(ctor: new () => TService, serviceName: string): void {
             if (!serviceName) {
                 throw new ResolutionException(ctor);
             }
@@ -173,11 +173,11 @@ module TSFunq {
             }
         }
 
-        throwIfNotRegistered<TService, TFunc>(ctor: new () => TService, name: string): void {
+        private throwIfNotRegistered<TService, TFunc>(ctor: new () => TService, name: string): void {
             this.getEntry<TService, TFunc>(ctor, name, true);
         }
 
-        trackDisposable(instance: IDisposable): void {
+        public trackDisposable(instance: IDisposable): void {
             this.disposables.push(instance);
         }
     }
