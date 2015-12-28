@@ -9,7 +9,9 @@
     "jasmine": "^2.4.1",
     "gulp-jasmine": "^2.2.1"
   },
-  "description": "TSFunq",
+  "license": "MIT",
+  "author": "Sagi Fogel",
+  "description": "Funq Dependency injection container port for TypeScript",
   "scripts": {
     "gulp": "gulp"
   }
