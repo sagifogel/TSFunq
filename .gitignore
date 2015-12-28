@@ -6,3 +6,4 @@ src/*.js
 src/*.js.map
 .vs
 node_modules/
+spec/
