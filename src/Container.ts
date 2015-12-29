@@ -6,7 +6,7 @@ import {GenericServiceEntry} from "./GenericServiceEntry";
 import {ResolutionException} from "./ResolutionException";
 import {RegistrationException} from "./RegistrationException";
 
-class Container implements Container {
+class Container implements IContainer {
     private parent: Container;
     private defaultOwner = Owner.container;
     private defaultReuse = ReuseScope.container;
