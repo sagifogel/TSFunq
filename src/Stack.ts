@@ -5,27 +5,27 @@
         this.arr = new Array<T>();
     }
 
-    get length() {
+    public get length() {
         return this.arr.length;
     }
 
-    clear(): void {
+    public clear(): void {
         this.arr.length = 0;
     }
 
-    contains(item: T): boolean {
+    public contains(item: T): boolean {
         return this.arr.indexOf(item) > -1;
     }
 
-    peek(): T {
+    public peek(): T {
         return this.arr[0];
     }
 
-    pop(): T {
+    public pop(): T {
         return this.arr.shift();
     }
 
-    push(item: T): void {
+    public push(item: T): void {
         this.arr.push(item);
     }
 }

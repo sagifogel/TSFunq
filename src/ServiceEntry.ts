@@ -5,11 +5,11 @@ class ServiceEntry implements IRegistration {
     public reuse: ReuseScope;
     public container: Container;
 
-    ownedBy(owner: Owner): void {
+    public ownedBy(owner: Owner): void {
         this.owner = owner;
     }
 
-    reusedWithin(scope: ReuseScope): IOwned {
+    public reusedWithin(scope: ReuseScope): IOwned {
         this.reuse = scope;
         return this;
     }

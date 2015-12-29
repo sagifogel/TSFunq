@@ -16,7 +16,7 @@ class ServiceKey implements IEquatable<ServiceKey> {
         }
     }
 
-    equals(obj: ServiceKey): boolean {
+    public equals(obj: ServiceKey): boolean {
         if (obj && obj.getHashCode) {
             return obj.getHashCode() === this.getHashCode();
         }
@@ -24,7 +24,7 @@ class ServiceKey implements IEquatable<ServiceKey> {
         return false;
     }
 
-    getHashCode(): number {
+    public getHashCode(): number {
         return this.hash;
     }
 }

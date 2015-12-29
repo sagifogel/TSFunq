@@ -40,7 +40,7 @@ class GenericServiceEntry<TService, TFunc> extends ServiceEntry implements IGene
         });
     }
 
-    static build<TService, TFunc>(bag: { factory: TFunc, container: Container, reuse?: ReuseScope, owner?: Owner, instance?: TService, initializer?: Action<Container, TService> }) {
+    public static build<TService, TFunc>(bag: { factory: TFunc, container: Container, reuse?: ReuseScope, owner?: Owner, instance?: TService, initializer?: Action<Container, TService> }) {
         var serviceEntry = new GenericServiceEntry<TService, TFunc>(bag.factory);
 
         serviceEntry.owner = bag.owner;
