@@ -61,7 +61,7 @@ class Container implements IContainer {
         var entry = this.registerImpl<TService, Func<Container, TService>>(ctor, name, null);
 
         entry.reusedWithin(ReuseScope.hierarchy)
-            .ownedBy(Owner.external);
+             .ownedBy(Owner.external);
 
         entry.initializeInstance(instance);
     }
@@ -154,19 +154,10 @@ class Container implements IContainer {
             }
         }
         else if (throwIfMissing) {
-            Container.throwMissing<TService>(ctor, serviceName);
+            throw new ResolutionException(ctor, serviceName)
         }
 
         return <GenericServiceEntry<TService, TFunc>>entry;
-    }
-
-    private static throwMissing<TService>(ctor: new () => TService, serviceName: string): void {
-        if (!serviceName) {
-            throw new ResolutionException(ctor);
-        }
-        else {
-            throw new ResolutionException(ctor, serviceName);
-        }
     }
 
     private throwIfNotRegistered<TService, TFunc>(ctor: new () => TService, name: string): void {
