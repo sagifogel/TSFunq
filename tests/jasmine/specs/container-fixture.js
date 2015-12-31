@@ -1,4 +1,4 @@
-﻿var TSFunq = require("../../../bundle/source/TSFunq");
+﻿var TSFunq = require("../../../dist/TSFunq");
 var Subjects = require("../../../tests/jasmine/subjects");
 
 describe("TSFunq", function () {

@@ -2,22 +2,23 @@
   "name": "TSFunq",
   "version": "1.0.0",
   "dependencies": {
-    "browserify": "^12.0.1",
     "gulp": "*",
+    "browserify": "^12.0.1",
     "gulp-header": "^1.7.1"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-typescript": "^2.8.2",  
-    "gulp-jasmine": "^2.2.1",
+    "rimraf" : "^2.5.0",
+    "jasmine": "^2.4.1",
+    "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.1",
     "gulp-header": "^1.7.1",
-    "jasmine": "^2.4.1",
+    "browserify": "^11.0.1,",
+    "run-sequence": "^1.1.5",
+    "gulp-jasmine": "^2.2.1",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "browserify": "^11.0.1",
-    "run-sequence": "^1.1.5"
-
+    "gulp-typescript": "^2.8.2",  
+    "vinyl-source-stream": "^1.1.0"
   },
   "license": "MIT",
   "author": "Sagi Fogel",

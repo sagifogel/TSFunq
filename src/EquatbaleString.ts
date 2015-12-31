@@ -1,9 +1,5 @@
-﻿class EquatbaleString implements IEquatable<EquatbaleString> {
+﻿class EquatbaleString implements IHashable {
     constructor(private value: string) {
-    }
-
-    public equals(other: EquatbaleString): boolean {
-        return this.getHashCode() === other.getHashCode();
     }
 
     public getHashCode(): number {
@@ -21,4 +17,4 @@
     }
 }
 
-export {EquatbaleString }
+export { EquatbaleString }

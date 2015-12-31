@@ -23,4 +23,4 @@
     }
 }
 
-export {NameResolver}
+export { NameResolver }

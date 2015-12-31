@@ -1,6 +1,9 @@
 "use strict";
 
-var gulp = require('gulp'),
+var entryFile,
+    gulp = require('gulp'),
+    rimraf = require("rimraf"),
+    rename = require("gulp-rename"),
     jasmine = require('gulp-jasmine'),
     tsc = require('gulp-typescript'),
     source = require("vinyl-source-stream"),
@@ -15,20 +18,49 @@ var gulp = require('gulp'),
 //******************************************************************************
 
 gulp.task('build-source', function () {
-    return gulp.src(['type_definitions/**/*.ts', 'src/**/*.ts'])
+    return gulp.src(['type_definitions/**/*.ts',
+            'src/**/Container.ts',
+            'src/**/Dictionary.ts',
+            'src/**/EquatbaleString.ts',
+            'src/**/GenericServiceEntry.ts',
+            'src/**/NameResolver.ts',
+            'src/**/Owner.ts',
+            'src/**/ReuseScope.ts',
+            'src/**/ServiceEntry.ts',
+            'src/**/ServiceKey.ts',
+            'src/**/' + entryFile + ".ts"])
         .pipe(tsc({
-            removeComments: false,
-            noImplicitAny: false,
             target: "ES5",
             module: "commonjs",
+            noImplicitAny: false,
+            removeComments: false,
             declarationFiles: false
         }))
         .pipe(gulp.dest('build/source/'));
 });
 
-
-gulp.task("build", function (cb) {
+gulp.task("build-release", function (cb) {
+    entryFile = "TSFunq-release";
     runSequence("build-source", cb);
+});
+
+gulp.task("build-test", function (cb) {
+    entryFile = "TSFunq-test";
+    runSequence("build-source", cb);
+});
+
+gulp.task('delete-build', function (cb) {
+    rimraf('./build', cb);
+});
+
+gulp.task('delete-bundle', function (cb) {
+    rimraf('./bundle', cb);
+});
+
+gulp.task('rename-entryfile', function (cb) {
+    return gulp.src("./build/source/" + entryFile + ".js")
+               .pipe(rename("./build/source/TSFunq.js"))
+               .pipe(gulp.dest("./"));
 });
 
 //******************************************************************************
@@ -43,14 +75,18 @@ gulp.task("bundle-source", function () {
     });
 
     return b.bundle()
-      .pipe(source("TSFunq.js"))
-      .pipe(buffer())
-      .pipe(gulp.dest(__dirname + "/bundle/source/"));
+            .pipe(source("TSFunq.js"))
+            .pipe(buffer())
+            .pipe(gulp.dest(__dirname + "/bundle/source/"));
 });
 
 
-gulp.task("bundle", function (cb) {
-    runSequence("build", "bundle-source", cb);
+gulp.task("bundle-test", function (cb) {
+    runSequence("build-test", "rename-entryfile", "bundle-source", "delete-build", cb);
+});
+
+gulp.task("bundle-release", function (cb) {
+    runSequence("build-release", "rename-entryfile", "bundle-source", "delete-build", cb);
 });
 
 //******************************************************************************
@@ -68,7 +104,7 @@ gulp.task('servicekey-fixture', function () {
 });
 
 gulp.task("test", function (cb) {
-    runSequence("bundle", "container-fixture", "servicekey-fixture", cb);
+    runSequence("bundle-test", "compress", "delete-bundle", "container-fixture", "servicekey-fixture", cb);
 });
 
 //******************************************************************************
@@ -83,9 +119,7 @@ gulp.task("compress", function () {
 
 
 gulp.task("header", function () {
-
     var pkg = require(__dirname + "/package.json");
-
     var banner = ["/**",
       " * <%= pkg.name %> v.<%= pkg.version %> - <%= pkg.description %>",
       " * Copyright (c) 2015 <%= pkg.author %>",
@@ -99,8 +133,8 @@ gulp.task("header", function () {
                .pipe(gulp.dest(__dirname + "/dist/"));
 });
 
-gulp.task("release", function(cb) {
-    runSequence("bundle", "compress", "header", cb);
+gulp.task("release", function (cb) {
+    runSequence("bundle-release", "compress", "delete-bundle", "header", cb);
 });
 
 //******************************************************************************
@@ -109,8 +143,8 @@ gulp.task("release", function(cb) {
 
 gulp.task("default", function (cb) {
     runSequence(
-    "build-source",
-    "bundle-source",
+    "build-source-release",
+    "bundle-source-release",
     "container-fixture",
     "servicekey-fixture",
     "compress",

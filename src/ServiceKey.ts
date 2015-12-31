@@ -1,7 +1,7 @@
-﻿import {NameResolver} from "./NameResolver";
-import {EquatbaleString} from "./EquatbaleString";
+﻿import { NameResolver } from "./NameResolver";
+import { EquatbaleString } from "./EquatbaleString";
 
-class ServiceKey implements IEquatable<ServiceKey> {
+class ServiceKey implements IHashable {
     private hash: number;
 
     constructor(private ctor: Function, private serviceName?: string) {
@@ -16,17 +16,9 @@ class ServiceKey implements IEquatable<ServiceKey> {
         }
     }
 
-    public equals(obj: ServiceKey): boolean {
-        if (obj && obj.getHashCode) {
-            return obj.getHashCode() === this.getHashCode();
-        }
-
-        return false;
-    }
-
     public getHashCode(): number {
         return this.hash;
     }
 }
 
-export {ServiceKey}
+export { ServiceKey }

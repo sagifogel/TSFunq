@@ -41,6 +41,8 @@
     <TypeScriptCompile Include="src\ServiceEntry.ts" />
     <TypeScriptCompile Include="src\ServiceKey.ts" />
     <TypeScriptCompile Include="src\Stack.ts" />
+    <TypeScriptCompile Include="src\TSFunq-release.ts" />
+    <TypeScriptCompile Include="src\TSFunq-test.ts" />
     <TypeScriptCompile Include="src\TSFunq.ts" />
     <TypeScriptCompile Include="type_definitions\interfaces.d.ts" />
     <TypeScriptCompile Include="type_definitions\TSFunq.d.ts" />

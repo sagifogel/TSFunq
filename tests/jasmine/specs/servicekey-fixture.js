@@ -1,4 +1,4 @@
-﻿var TSFunq = require("../../../bundle/source/TSFunq");
+﻿var TSFunq = require("../../../dist/TSFunq");
 var Subjects = require("../../../tests/jasmine/subjects");
 
 describe("TSFunq", function () {
@@ -14,7 +14,7 @@ describe("KeyNotEqualsNull", function () {
         var key1 = new TSFunq.ServiceKey(Subjects.Disposable, null);
 
         expect(key1).not.toBeNull();
-        expect(key1.equals(null)).toBeFalsy();
+        expect(key1.getHashCode()).not.toBe(null);
     });
 });
 
@@ -23,7 +23,6 @@ describe("KeyNotEqualsOtherType", function () {
         var key1 = new TSFunq.ServiceKey(Subjects.Disposable, null);
 
         expect(key1).not.toEqual({});
-        expect(key1.equals({})).toBeFalsy();
     });
 });
 
@@ -33,7 +32,7 @@ describe("KeyEqualsSameReference", function () {
         var key2 = key1;
 
         expect(key1).toBe(key2);
-        expect(key1.equals(key2)).toBeTruthy();
+        expect(key1.getHashCode()).toEqual(key2.getHashCode());
     });
 });
 
@@ -44,7 +43,6 @@ describe("KeysAreEqualByType", function () {
 
         expect(key1).not.toBe(key2);
         expect(key1.getHashCode()).toEqual(key2.getHashCode());
-        expect(key1.equals(key2)).toBeTruthy();
     });
 });
 
@@ -55,7 +53,6 @@ describe("KeysAreEqualByTypeAndName", function () {
 
         expect(key1).not.toBe(key2);
         expect(key1.getHashCode()).toEqual(key2.getHashCode());
-        expect(key1.equals(key2)).toBeTruthy();
     });
 });
 
@@ -66,6 +63,5 @@ describe("KeysAreEqualByTypeAndName", function () {
 
         expect(key1).not.toBe(key2);
         expect(key1.getHashCode()).not.toEqual(key2.getHashCode());
-        expect(key1.equals(key2)).toBeFalsy();
     });
 });

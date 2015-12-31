@@ -1,7 +1,7 @@
-﻿import {Container} from "./Container";
-import {ServiceEntry} from "./ServiceEntry";
-import { Owner } from "./Owner";
+﻿import { Owner } from "./Owner";
+import { Container } from "./Container";
 import { ReuseScope } from "./ReuseScope";
+import { ServiceEntry } from "./ServiceEntry";
 
 class GenericServiceEntry<TService, TFunc> extends ServiceEntry implements IGenericRegistration<TService> {
     public instance: TService;
@@ -55,4 +55,4 @@ class GenericServiceEntry<TService, TFunc> extends ServiceEntry implements IGene
     }
 }
 
-export {GenericServiceEntry}
+export { GenericServiceEntry }

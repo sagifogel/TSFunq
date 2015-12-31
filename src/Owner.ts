@@ -1,4 +1,4 @@
-﻿enum Owner {
+﻿ enum Owner {
     container,
     external
 }

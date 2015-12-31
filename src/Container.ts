@@ -1,19 +1,17 @@
-﻿import {Stack} from "./Stack";
-import {Dictionary} from "./Dictionary";
-import {ServiceKey} from "./ServiceKey";
-import {ServiceEntry} from "./ServiceEntry";
-import {GenericServiceEntry} from "./GenericServiceEntry";
-import {ResolutionException} from "./ResolutionException";
-import {RegistrationException} from "./RegistrationException";
-import { Owner } from "./Owner";
+﻿import { Owner } from "./Owner";
+import { Dictionary } from "./Dictionary";
+import { ServiceKey } from "./ServiceKey";
 import { ReuseScope } from "./ReuseScope";
+import { ServiceEntry } from "./ServiceEntry";
+import { NameResolver } from "./NameResolver";
+import { GenericServiceEntry } from "./GenericServiceEntry";
 
 class Container implements IContainer {
     private parent: Container;
     private defaultOwner = Owner.container;
     private defaultReuse = ReuseScope.container;
-    private disposables = new Stack<IDisposable>();
-    private childContainers = new Stack<Container>();
+    private disposables = new Array<IDisposable>();
+    private childContainers = new Array<Container>();
     private services = new Dictionary<ServiceKey, ServiceEntry>();
 
     constructor() {
@@ -39,13 +37,13 @@ class Container implements IContainer {
 
     public dispose(): void {
         while (this.disposables.length > 0) {
-            let disposable = this.disposables.pop();
+            let disposable = this.disposables.shift();
 
             disposable.dispose();
         }
 
         while (this.childContainers.length > 0) {
-            this.childContainers.pop().dispose();
+            this.childContainers.shift().dispose();
         }
     }
 
@@ -63,7 +61,7 @@ class Container implements IContainer {
         var entry = this.registerImpl<TService, Func<Container, TService>>(ctor, name, null);
 
         entry.reusedWithin(ReuseScope.hierarchy)
-             .ownedBy(Owner.external);
+            .ownedBy(Owner.external);
 
         entry.initializeInstance(instance);
     }
@@ -77,7 +75,7 @@ class Container implements IContainer {
         var entry: GenericServiceEntry<TService, TFunc>;
 
         if (<Function>ctor === Container) {
-            throw new RegistrationException("Container service is built-in and read-only.");
+            throw new Error("Container service is built-in and read-only.");
         }
 
         entry = GenericServiceEntry.build<TService, TFunc>({
@@ -156,10 +154,21 @@ class Container implements IContainer {
             }
         }
         else if (throwIfMissing) {
-            throw new ResolutionException(ctor, serviceName)
+            this.throwMissing(ctor, serviceName)
         }
 
         return <GenericServiceEntry<TService, TFunc>>entry;
+    }
+
+    private throwMissing<TService>(ctor: new () => TService, serviceName: string) {
+        var buffer: Array<string> = [`Required dependency of type ${NameResolver.resolve(ctor)}`];
+
+        if (serviceName) {
+            buffer.push(` named ${serviceName}`);
+        }
+
+        buffer.push(" could not be resolved.");
+        throw new Error(buffer.join(""));
     }
 
     private throwIfNotRegistered<TService, TFunc>(ctor: new () => TService, name: string): void {
@@ -171,4 +180,4 @@ class Container implements IContainer {
     }
 }
 
-export {Container}
+export { Container }
