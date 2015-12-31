@@ -104,7 +104,7 @@ gulp.task('servicekey-fixture', function () {
 });
 
 gulp.task("test", function (cb) {
-    runSequence("bundle-test", "compress", "delete-bundle", "container-fixture", "servicekey-fixture", cb);
+    runSequence("bundle-test", "compress", "delete-bundle", "header", "container-fixture", "servicekey-fixture", cb);
 });
 
 //******************************************************************************
@@ -136,18 +136,3 @@ gulp.task("header", function () {
 gulp.task("release", function (cb) {
     runSequence("bundle-release", "compress", "delete-bundle", "header", cb);
 });
-
-//******************************************************************************
-//* DEFAULT
-//******************************************************************************
-
-gulp.task("default", function (cb) {
-    runSequence(
-    "build-source-release",
-    "bundle-source-release",
-    "container-fixture",
-    "servicekey-fixture",
-    "compress",
-    "header", cb);
-});
-
