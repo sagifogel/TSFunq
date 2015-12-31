@@ -23,6 +23,7 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="gulpfile.js" />
     <Content Include="tests\jasmine\specs\container-fixture.js" />
     <Content Include="tests\jasmine\specs\servicekey-fixture.js" />
     <Content Include="tests\jasmine\subjects.js" />
@@ -43,18 +44,10 @@
     <TypeScriptCompile Include="src\Stack.ts" />
     <TypeScriptCompile Include="src\TSFunq-release.ts" />
     <TypeScriptCompile Include="src\TSFunq-test.ts" />
-    <TypeScriptCompile Include="src\TSFunq.ts" />
-    <TypeScriptCompile Include="type_definitions\interfaces.d.ts" />
     <TypeScriptCompile Include="type_definitions\TSFunq.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="package.json" />
-    <None Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-    <None Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Data.DataSetExtensions" />
