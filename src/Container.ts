@@ -47,7 +47,7 @@ class Container implements IContainer {
         }
     }
 
-    public register<TService>(ctor: { new (): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
+    public register<TService>(ctor: { new (...args: Array<any>): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
         return this.registerNamed(ctor, null, factory);
     }
 
@@ -66,11 +66,11 @@ class Container implements IContainer {
         entry.initializeInstance(instance);
     }
 
-    public registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
+    public registerNamed<TService>(ctor: { new (...args: Array<any>): TService; }, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
         return this.registerImpl<TService, Func<Container, TService>>(ctor, name, factory);
     }
 
-    private registerImpl<TService, TFunc>(ctor: new () => TService, name: string, factory: TFunc): GenericServiceEntry<TService, TFunc> {
+    private registerImpl<TService, TFunc>(ctor: new (...args: Array<any>) => TService, name: string, factory: TFunc): GenericServiceEntry<TService, TFunc> {
         var key: ServiceKey;
         var entry: GenericServiceEntry<TService, TFunc>;
 
@@ -91,33 +91,33 @@ class Container implements IContainer {
         return entry;
     }
 
-    public resolve<TService>(ctor: new () => TService): TService {
+    public resolve<TService>(ctor: new (...args: Array<any>) => TService): TService {
         return this.resolveNamed<TService>(ctor, null);
     }
 
-    public resolveNamed<TService>(ctor: new () => TService, name: string): TService {
+    public resolveNamed<TService>(ctor: new (...args: Array<any>) => TService, name: string): TService {
         return this.resolveImpl<TService>(ctor, name, true);
     }
 
-    public tryResolve<TService>(ctor: new () => TService): TService {
+    public tryResolve<TService>(ctor: new (...args: Array<any>) => TService): TService {
         return this.tryResolveNamed<TService>(ctor, null);
     }
 
-    public tryResolveNamed<TService>(ctor: new () => TService, name: string): TService {
+    public tryResolveNamed<TService>(ctor: new (...args: Array<any>) => TService, name: string): TService {
         return this.resolveImpl<TService>(ctor, name, false);
     }
 
-    public lazyResolve<TService>(ctor: new () => TService): () => TService {
+    public lazyResolve<TService>(ctor: new (...args: Array<any>) => TService): () => TService {
         return this.lazyResolveNamed<TService>(ctor, null);
     }
 
-    public lazyResolveNamed<TService>(ctor: new () => TService, name: string): () => TService {
+    public lazyResolveNamed<TService>(ctor: new (...args: Array<any>) => TService, name: string): () => TService {
         this.throwIfNotRegistered<TService, Func<Container, TService>>(ctor, name);
 
         return () => this.resolveNamed<TService>(ctor, name);
     }
 
-    private resolveImpl<TService>(ctor: new () => TService, name: string, throwIfMissing: boolean): TService {
+    private resolveImpl<TService>(ctor: new (...args: Array<any>) => TService, name: string, throwIfMissing: boolean): TService {
         var instance: TService;
         var entry = this.getEntry<TService, Func<Container, TService>>(ctor, name, throwIfMissing);
 
@@ -135,7 +135,7 @@ class Container implements IContainer {
         return instance;
     }
 
-    private getEntry<TService, TFunc>(ctor: new () => TService, serviceName: string, throwIfMissing: boolean): GenericServiceEntry<TService, TFunc> {
+    private getEntry<TService, TFunc>(ctor: new (...args: Array<any>) => TService, serviceName: string, throwIfMissing: boolean): GenericServiceEntry<TService, TFunc> {
         var container: Container = this;
         var entry: ServiceEntry;
         var key = new ServiceKey(ctor, serviceName);
@@ -160,7 +160,7 @@ class Container implements IContainer {
         return <GenericServiceEntry<TService, TFunc>>entry;
     }
 
-    private throwMissing<TService>(ctor: new () => TService, serviceName: string) {
+    private throwMissing<TService>(ctor: new (...args: Array<any>) => TService, serviceName: string) {
         var buffer: Array<string> = [`Required dependency of type ${NameResolver.resolve(ctor)}`];
 
         if (serviceName) {
@@ -171,7 +171,7 @@ class Container implements IContainer {
         throw new Error(buffer.join(""));
     }
 
-    private throwIfNotRegistered<TService, TFunc>(ctor: new () => TService, name: string): void {
+    private throwIfNotRegistered<TService, TFunc>(ctor: new (...args: Array<any>) => TService, name: string): void {
         this.getEntry<TService, TFunc>(ctor, name, true);
     }
 
