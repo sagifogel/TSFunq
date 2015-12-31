@@ -1,6 +1,19 @@
 ﻿declare module "TSFunq" {
     export module TSFunq {
-        export class Container implements IRegistry, IRegistrationResolver, IDisposable {
+        export enum ReuseScope {
+            container,
+            hierarchy,
+            none,
+            default
+        }
+
+        export enum Owner {
+            container,
+            external,
+            default
+        }
+
+        export class Container {
             dispose(): void;
             registerInstance<TService>(instance: TService): void;
             resolve<TService>(ctor: new () => TService): TService;
@@ -10,8 +23,8 @@
             resolveNamed<TService>(ctor: new () => TService, name: string): TService;
             tryResolveNamed<TService>(ctor: new () => TService, name: string): TService;
             lazyResolveNamed<TService>(ctor: new () => TService, name: string): () => TService;
-            register<TService>(ctor: { new (): TService; }, factory: Func<IRegistrationResolver, TService>): IGenericRegistration<TService>;
-            registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: Func<IRegistrationResolver, TService>): IGenericRegistration<TService>;
+            register<TService>(ctor: { new (): TService; }, factory: (IRegistrationResolver) => TService): IGenericRegistration<TService>;
+            registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: (IRegistrationResolver) => TService): IGenericRegistration<TService>;
         }
     }
-} 
+}

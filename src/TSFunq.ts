@@ -1,2 +1,5 @@
 ﻿import { Container } from "./Container";
-export { Container };
+import { Owner } from "./Owner";
+import { ReuseScope } from "./ReuseScope";
+
+export { IRegistrationResolver, IRegistry, IDisposable, Container, Owner , ReuseScope }

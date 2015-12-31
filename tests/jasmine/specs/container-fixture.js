@@ -1,5 +1,13 @@
-﻿var TSFunq = require("../../../build/TSFunq");
+﻿var TSFunq = require("../../../bundle/source/TSFunq");
 var Subjects = require("../../../tests/jasmine/subjects");
+
+describe("TSFunq", function () {
+    it("should be defined", function () {
+        var container = new TSFunq.Container();
+
+        expect(container).toBeTruthy();
+    });
+});
 
 describe("ShouldRegister", function () {
     it("should register a factory and should resolve an instance of the registered type", function () {

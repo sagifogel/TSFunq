@@ -5,6 +5,8 @@ import {ServiceEntry} from "./ServiceEntry";
 import {GenericServiceEntry} from "./GenericServiceEntry";
 import {ResolutionException} from "./ResolutionException";
 import {RegistrationException} from "./RegistrationException";
+import { Owner } from "./Owner";
+import { ReuseScope } from "./ReuseScope";
 
 class Container implements IContainer {
     private parent: Container;

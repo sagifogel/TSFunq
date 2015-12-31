@@ -1,17 +1,4 @@
-﻿declare enum ReuseScope {
-    container,
-    hierarchy,
-    none,
-    default
-}
-
-declare enum Owner {
-    container,
-    external,
-    default
-}
-
-interface IHashable {
+﻿interface IHashable {
     getHashCode(): number;
 }
 
@@ -37,11 +24,11 @@ interface IReusedOwned extends IReused, IOwned {
 }
 
 interface IOwned {
-    ownedBy(owner: Owner): void;
+    ownedBy(owner: number): void;
 }
 
 interface IReused {
-    reusedWithin(scope: ReuseScope): IOwned;
+    reusedWithin(scope: number): IOwned;
 }
 
 interface IRegistry {
@@ -51,6 +38,9 @@ interface IRegistry {
     registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: Func<IRegistrationResolver, TService>): IGenericRegistration<TService>;
 }
 
+interface IContainer extends IRegistrationResolver, IRegistry, IDisposable {
+}
+
 interface IRegistrationResolver {
     resolve<TService>(ctor: new () => TService): TService;
     tryResolve<TService>(ctor: new () => TService): TService;
@@ -58,9 +48,6 @@ interface IRegistrationResolver {
     resolveNamed<TService>(ctor: new () => TService, name: string): TService;
     tryResolveNamed<TService>(ctor: new () => TService, name: string): TService;
     lazyResolveNamed<TService>(ctor: new () => TService, name: string): () => TService;
-}
-
-interface IContainer extends IRegistrationResolver, IRegistry, IDisposable {
 }
 
 declare type Func<T1, TResult> = (arg1: T1) => TResult;

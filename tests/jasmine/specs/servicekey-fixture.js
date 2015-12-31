@@ -1,5 +1,13 @@
-﻿var TSFunq = require("../../../build/TSFunq");
+﻿var TSFunq = require("../../../bundle/source/TSFunq");
 var Subjects = require("../../../tests/jasmine/subjects");
+
+describe("TSFunq", function () {
+    it("should be defined", function () {
+        var container = new TSFunq.Container();
+
+        expect(container).toBeTruthy();
+    });
+});
 
 describe("KeyNotEqualsNull", function () {
     it("should return false when new service key is compared to null", function () {
