@@ -4,7 +4,7 @@ import { EquatbaleString } from "./EquatbaleString";
 class ServiceKey implements IHashable {
     private hash: number;
 
-    constructor(private ctor: Function, private serviceName?: string) {
+    constructor(private ctor: Function | string, private serviceName?: string) {
         var name = NameResolver.resolve(ctor);
         var equatbaleString = new EquatbaleString(name);
 
@@ -21,4 +21,4 @@ class ServiceKey implements IHashable {
     }
 }
 
-export { ServiceKey }
+export { ServiceKey };

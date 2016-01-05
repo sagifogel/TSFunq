@@ -17,5 +17,5 @@ class ServiceEntry implements IRegistration {
     }
 }
 
-export { ServiceEntry }
+export { ServiceEntry };
 

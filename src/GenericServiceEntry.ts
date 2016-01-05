@@ -55,4 +55,4 @@ class GenericServiceEntry<TService, TFunc> extends ServiceEntry implements IGene
     }
 }
 
-export { GenericServiceEntry }
+export { GenericServiceEntry };

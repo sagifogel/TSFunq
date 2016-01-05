@@ -1,8 +1,12 @@
 ﻿class NameResolver {
     static nameRegex = /function ([^\(]+)/;
 
-    public static resolve(ctor: Function): string {
-        return (<any>ctor).name || NameResolver.resolveByCode(ctor);
+    public static resolve(ctor: Function | string): string {
+        if (typeof ctor === "string") {
+            return ctor;
+        }
+
+        return (<any>ctor).name || NameResolver.resolveByCode(<Function>ctor);
     }
 
     private static resolveByCode(ctor: Function): string {
@@ -23,4 +27,4 @@
     }
 }
 
-export { NameResolver }
+export { NameResolver };

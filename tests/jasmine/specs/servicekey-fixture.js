@@ -56,10 +56,50 @@ describe("KeysAreEqualByTypeAndName", function () {
     });
 });
 
-describe("KeysAreEqualByTypeAndName", function () {
+describe("KeysAreNotEqualByTypeAndDifferentName", function () {
     it("should return false when two service keys are created with the same function but different service name", function () {
         var key1 = new TSFunq.ServiceKey(Subjects.Disposable, "foo");
         var key2 = new TSFunq.ServiceKey(Subjects.Disposable, "bar");
+
+        expect(key1).not.toBe(key2);
+        expect(key1.getHashCode()).not.toEqual(key2.getHashCode());
+    });
+});
+
+describe("KeysAreEqualByTypedString", function () {
+    it("should return true when two service keys are created with the same function and service name", function () {
+        var key1 = new TSFunq.ServiceKey("Subjects.Disposable", null);
+        var key2 = new TSFunq.ServiceKey("Subjects.Disposable", null);
+
+        expect(key1).not.toBe(key2);
+        expect(key1.getHashCode()).toEqual(key2.getHashCode());
+    });
+});
+
+describe("KeysAreEqualByTypedStringAndName", function () {
+    it("should return true when two service keys are created with the same function and service name", function () {
+        var key1 = new TSFunq.ServiceKey("Subjects.Disposable", "foo");
+        var key2 = new TSFunq.ServiceKey("Subjects.Disposable", "foo");
+
+        expect(key1).not.toBe(key2);
+        expect(key1.getHashCode()).toEqual(key2.getHashCode());
+    });
+});
+
+describe("KeysAreNotEqualByTypedStringAndDifferentName", function () {
+    it("should return false when two service keys are created with the same function but different service name", function () {
+        var key1 = new TSFunq.ServiceKey("Subjects.Disposable", "foo");
+        var key2 = new TSFunq.ServiceKey("Subjects.Disposable", "bar");
+
+        expect(key1).not.toBe(key2);
+        expect(key1.getHashCode()).not.toEqual(key2.getHashCode());
+    });
+});
+
+describe("KeysAreNotEqualByDifferentTypedStringAndName", function () {
+    it("should return false when two service keys are created with the same function but different service name", function () {
+        var key1 = new TSFunq.ServiceKey("Subjects.Disposable", "foo");
+        var key2 = new TSFunq.ServiceKey("Subjects.Disposable1", "foo");
 
         expect(key1).not.toBe(key2);
         expect(key1.getHashCode()).not.toEqual(key2.getHashCode());

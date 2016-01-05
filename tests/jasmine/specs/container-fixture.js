@@ -675,3 +675,91 @@ describe("LazyResolveNamedThrowsIfNotRegistered", function () {
         }
     });
 });
+
+describe("ShouldRegisterUsingTypedString", function () {
+    it("should register a factory and should resolve an instance of the registered type using a typed string", function () {
+        var foo;
+        var container = new TSFunq.Container();
+
+        container.register("Subjects.Foo", function (c) { return new Subjects.Foo(); });
+        foo = container.resolve("Subjects.Foo");
+
+        expect(foo).not.toBeNull();
+    });
+});
+
+describe("ShouldRegisterNamedUsingTypedString", function () {
+    it("should register a factory and should resolve an instance of the registered type using a typed string", function () {
+        var foo;
+        var container = new TSFunq.Container();
+
+        container.registerNamed("Subjects.Foo", "Subjects.Foo", function (c) { return new Subjects.Foo(); });
+        foo = container.resolveNamed("Subjects.Foo", "Subjects.Foo");
+
+        expect(foo).not.toBeNull();
+    });
+});
+
+describe("ThrowsIfCannotResolveUsingTypedString", function () {
+    it("should throw a ResolutionException when type is not registered using the correct typed string", function () {
+        var foo;
+        var container = new TSFunq.Container();
+
+        container.register("Subjects.Foo", function (c) { return new Subjects.Foo(); });
+
+        try {
+            foo = container.resolve("Subjects.Foo2");
+            fail("Should have thrown ResolutionException");
+        }
+        catch (re) {
+            expect(re.message.indexOf("Foo")).not.toEqual(-1);
+        }
+    });
+});
+
+describe("ThrowsIfCannotResolveNamedUsingTypedString", function () {
+    it("should throw a ResolutionException when type is not registered using the correct string", function () {
+        var foo;
+        var container = new TSFunq.Container();
+
+        container.registerNamed("Subjects.Foo", "Subjects.Foo", function (c) { return new Subjects.Foo(); });
+
+        try {
+            foo = container.resolveNamed("Subjects.Foo2", "Subjects.Foo");
+            fail("Should have thrown ResolutionException");
+        }
+        catch (re) {
+            expect(re.message.indexOf("Foo")).not.toEqual(-1);
+        }
+    });
+});
+
+describe("ThrowsIfCannotResolveNamedUsingSameTypedStringButDifferentName", function () {
+    it("should throw a ResolutionException when type is not registered using the correct string", function () {
+        var foo;
+        var container = new TSFunq.Container();
+
+        container.registerNamed("Subjects.Foo", "Subjects.Foo", function (c) { return new Subjects.Foo(); });
+
+        try {
+            foo = container.resolveNamed("Subjects.Foo", "Subjects.Foo2");
+            fail("Should have thrown ResolutionException");
+        }
+        catch (re) {
+            expect(re.message.indexOf("Foo")).not.toEqual(-1);
+        }
+    });
+});
+
+describe("ChildContainerCanReuseRegistrationsOnParentUsingTypedStringAsKey", function () {
+    it("should register a factory using a typed string on a container, create a child container and resolve an instance using the typed key and the child container", function () {
+        var foo;
+        var container = new TSFunq.Container();
+        var child = container.createChildContainer();
+
+        container.register("Subjects.Foo", function (c) { return new Subjects.Foo(); })
+        foo = child.resolve("Subjects.Foo");
+
+        expect(foo).not.toBeNull();
+    });
+});

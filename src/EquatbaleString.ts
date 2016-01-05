@@ -17,4 +17,4 @@
     }
 }
 
-export { EquatbaleString }
+export { EquatbaleString };

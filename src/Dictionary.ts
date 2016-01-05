@@ -15,4 +15,4 @@
     }
 }
 
-export { Dictionary }
+export { Dictionary };
