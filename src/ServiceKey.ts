@@ -5,8 +5,8 @@ class ServiceKey implements IHashable {
     private hash: number;
 
     constructor(private ctor: Function | string, private serviceName?: string) {
-        var name = NameResolver.resolve(ctor);
-        var equatbaleString = new EquatbaleString(name);
+        let name = NameResolver.resolve(ctor);
+        let equatbaleString = new EquatbaleString(name);
 
         this.hash = equatbaleString.getHashCode();
 

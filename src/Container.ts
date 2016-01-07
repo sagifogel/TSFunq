@@ -15,7 +15,7 @@ class Container implements IContainer {
     private services = new Dictionary<ServiceKey, ServiceEntry>();
 
     constructor() {
-        var serviceEntry = GenericServiceEntry.build<Container, Func<Container, Container>>({
+        let serviceEntry = GenericServiceEntry.build<Container, Func<Container, Container>>({
             instance: this,
             factory: c => c,
             container: this,
@@ -27,7 +27,7 @@ class Container implements IContainer {
     }
 
     public createChildContainer(): Container {
-        var child = new Container();
+        let child = new Container();
 
         child.parent = this;
         this.childContainers.push(child);
@@ -47,7 +47,7 @@ class Container implements IContainer {
         }
     }
 
-    public register<TService>(ctor: { new (...args: Array<any>): TService; }, factory: Func<Container, TService>): IGenericRegistration<TService> {
+    public register<TService>(ctor: Constructor<TService>, factory: Func<Container, TService>): IGenericRegistration<TService> {
         return this.registerNamed(ctor, null, factory);
     }
 
@@ -56,9 +56,9 @@ class Container implements IContainer {
     }
 
     public registerNamedInstance<TService>(name: string, instance: TService): void {
-        var proto = Object.getPrototypeOf(instance);
-        var ctor = <new () => TService>proto.constructor;
-        var entry = this.registerImpl<TService, Func<Container, TService>>(ctor, name, null);
+        let proto = Object.getPrototypeOf(instance);
+        let ctor = <new () => TService>proto.constructor;
+        let entry = this.registerImpl<TService, Func<Container, TService>>(ctor, name, null);
 
         entry.reusedWithin(ReuseScope.hierarchy)
             .ownedBy(Owner.external);
@@ -71,10 +71,10 @@ class Container implements IContainer {
     }
 
     private registerImpl<TService, TFunc>(ctor: Constructor<TService>, name: string, factory: TFunc): GenericServiceEntry<TService, TFunc> {
-        var key: ServiceKey;
-        var entry: GenericServiceEntry<TService, TFunc>;
+        let key: ServiceKey;
+        let entry: GenericServiceEntry<TService, TFunc>;
 
-        if (<Function>ctor === Container) {
+        if (<any>ctor === Container) {
             throw new Error("Container service is built-in and read-only.");
         }
 
@@ -118,8 +118,8 @@ class Container implements IContainer {
     }
 
     private resolveImpl<TService>(ctor: Constructor<TService>, name: string, throwIfMissing: boolean): TService {
-        var instance: TService;
-        var entry = this.getEntry<TService, Func<Container, TService>>(ctor, name, throwIfMissing);
+        let instance: TService;
+        let entry = this.getEntry<TService, Func<Container, TService>>(ctor, name, throwIfMissing);
 
         if (!entry) {
             return null;
@@ -136,10 +136,10 @@ class Container implements IContainer {
     }
 
     private getEntry<TService, TFunc>(ctor: Constructor<TService>, serviceName: string, throwIfMissing: boolean): GenericServiceEntry<TService, TFunc> {
-        var container: Container = this;
-        var entry: ServiceEntry;
-        var key = new ServiceKey(ctor, serviceName);
-        var outResult = <{ out: any }>{};
+        let container: Container = this;
+        let entry: ServiceEntry;
+        let key = new ServiceKey(ctor, serviceName);
+        let outResult = <{ out: any }>{};
 
         while (!container.services.tryGetValue(key, outResult) && container.parent) {
             container = container.parent;
@@ -161,7 +161,7 @@ class Container implements IContainer {
     }
 
     private throwMissing<TService>(ctor: Constructor<TService>, serviceName: string) {
-        var buffer: Array<string> = [`Required dependency of type ${NameResolver.resolve(ctor)}`];
+        let buffer: Array<string> = [`Required dependency of type ${NameResolver.resolve(ctor)}`];
 
         if (serviceName) {
             buffer.push(` named ${serviceName}`);

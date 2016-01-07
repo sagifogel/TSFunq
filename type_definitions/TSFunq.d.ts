@@ -48,4 +48,4 @@ interface IRegistrationResolver {
 
 declare type Func<T1, TResult> = (arg1: T1) => TResult;
 declare type Action<T1, T2> = (arg1: T1, arg2: T2) => void;
-declare type Constructor<TService> = new (...args: any[]) => TService | string;
+declare type Constructor<TService> = (new (...args: any[]) => TService) | string;

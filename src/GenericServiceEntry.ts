@@ -12,7 +12,7 @@ class GenericServiceEntry<TService, TFunc> extends ServiceEntry implements IGene
     }
 
     public initializeInstance(instance: TService): void {
-        var dynamicInstance: any = instance;
+        let dynamicInstance: any = instance;
 
         if (this.reuse !== ReuseScope.none) {
             this.instance = instance;
@@ -43,7 +43,7 @@ class GenericServiceEntry<TService, TFunc> extends ServiceEntry implements IGene
     }
 
     public static build<TService, TFunc>(bag: { factory: TFunc, container: Container, reuse?: ReuseScope, owner?: Owner, instance?: TService, initializer?: Action<Container, TService> }) {
-        var serviceEntry = new GenericServiceEntry<TService, TFunc>(bag.factory);
+        let serviceEntry = new GenericServiceEntry<TService, TFunc>(bag.factory);
 
         serviceEntry.owner = bag.owner;
         serviceEntry.reuse = bag.reuse;

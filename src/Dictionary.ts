@@ -4,7 +4,7 @@
     }
 
     public tryGetValue(key: TKey, entry: { out: TValue }): boolean {
-        var value = this[key.getHashCode()];
+        let value = this[key.getHashCode()];
 
         if (value) {
             entry.out = value;
