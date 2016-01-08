@@ -30,20 +30,20 @@ interface IReused {
 interface IRegistry {
     registerInstance<TService>(instance: TService): void;
     registerNamedInstance<TService>(name: string, instance: TService): void;
-    register<TService>(ctor: { new (): TService; }, factory: Func<IRegistrationResolver, TService>): IGenericRegistration<TService>;
-    registerNamed<TService>(ctor: { new (): TService; }, name: string, factory: Func<IRegistrationResolver, TService>): IGenericRegistration<TService>;
+    register<TService>(ctor: Constructor<TService>, factory: Func<IRegistrationResolver, TService>): IGenericRegistration<TService>;
+    registerNamed<TService>(ctor: Constructor<TService>, name: string, factory: Func<IRegistrationResolver, TService>): IGenericRegistration<TService>;
 }
 
 interface IContainer extends IRegistrationResolver, IRegistry, IDisposable {
 }
 
 interface IRegistrationResolver {
-    resolve<TService>(ctor: new () => TService): TService;
-    tryResolve<TService>(ctor: new () => TService): TService;
-    lazyResolve<TService>(ctor: new () => TService): () => TService;
-    resolveNamed<TService>(ctor: new () => TService, name: string): TService;
-    tryResolveNamed<TService>(ctor: new () => TService, name: string): TService;
-    lazyResolveNamed<TService>(ctor: new () => TService, name: string): () => TService;
+    resolve<TService>(ctor: Constructor<TService>): TService;
+    tryResolve<TService>(ctor: Constructor<TService>): TService;
+    lazyResolve<TService>(ctor: Constructor<TService>): () => TService;
+    resolveNamed<TService>(ctor: Constructor<TService>, name: string): TService;
+    tryResolveNamed<TService>(ctor: Constructor<TService>, name: string): TService;
+    lazyResolveNamed<TService>(ctor: Constructor<TService>, name: string): () => TService;
 }
 
 declare type Func<T1, TResult> = (arg1: T1) => TResult;
