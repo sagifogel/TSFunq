@@ -47,6 +47,10 @@ class Container implements IContainer {
         }
     }
 
+    public register<TService, TArg1>(ctor: Constructor<TService>, factory: (container: IContainer, arg1: TArg1) => TService): IGenericRegistration<TService>;
+    public register<TService, TArg1, TArg2>(ctor: Constructor<TService>, factory: (container: IContainer, arg1: TArg1, arg2: TArg2) => TService): IGenericRegistration<TService>;
+    public register<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, factory: (container: IContainer, arg1: TArg1, arg2: TArg2, arg3: TArg3) => TService): IGenericRegistration<TService>;
+    public register<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, factory: (container: IContainer, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4) => TService): IGenericRegistration<TService>;
     public register<TService>(ctor: Constructor<TService>, factory: Func<Container, TService>): IGenericRegistration<TService> {
         return this.registerNamed(ctor, null, factory);
     }
@@ -66,6 +70,10 @@ class Container implements IContainer {
         entry.initializeInstance(instance);
     }
 
+    public registerNamed<TService, TArg1>(ctor: Constructor<TService>, name: string, factory: (container: IContainer, arg1: TArg1) => TService): IGenericRegistration<TService>;
+    public registerNamed<TService, TArg1, TArg2>(ctor: Constructor<TService>, name: string, factory: (container: IContainer, arg1: TArg1, arg2: TArg2) => TService): IGenericRegistration<TService>;
+    public registerNamed<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, name: string, factory: (container: IContainer, arg1: TArg1, arg2: TArg2, arg3: TArg3) => TService): IGenericRegistration<TService>;
+    public registerNamed<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, name: string, factory: (container: IContainer, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4) => TService): IGenericRegistration<TService>;
     public registerNamed<TService>(ctor: Constructor<TService>, name: string, factory: Func<Container, TService>): IGenericRegistration<TService> {
         return this.registerImpl<TService, Func<Container, TService>>(ctor, name, factory);
     }
@@ -91,33 +99,70 @@ class Container implements IContainer {
         return entry;
     }
 
-    public resolve<TService>(ctor: Constructor<TService>): TService {
-        return this.resolveNamed<TService>(ctor, null);
+    public resolve<TService, TArg1>(ctor: Constructor<TService>): TService;
+    public resolve<TService, TArg1>(ctor: Constructor<TService>, arg1: TArg1): TService;
+    public resolve<TService, TArg1, TArg2>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2): TService;
+    public resolve<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3): TService;
+    public resolve<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4): TService {
+        var args = [ctor, null, arg1, arg2, arg3, arg4];
+
+        return this.resolveNamed.apply(this, args);
     }
 
-    public resolveNamed<TService>(ctor: Constructor<TService>, name: string): TService {
-        return this.resolveImpl<TService>(ctor, name, true);
+    public resolveNamed<TService>(ctor: Constructor<TService>, name: string): TService;
+    public resolveNamed<TService, TArg1>(ctor: Constructor<TService>, name: string, arg1: TArg1): TService;
+    public resolveNamed<TService, TArg1, TArg2>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2): TService;
+    public resolveNamed<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3): TService;
+    public resolveNamed<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, name: string, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4): TService {
+        var args = Array.prototype.slice.call(arguments, 1);
+
+        return this.resolveImpl<TService>(ctor, name, true, args);
     }
 
-    public tryResolve<TService>(ctor: Constructor<TService>): TService {
-        return this.tryResolveNamed<TService>(ctor, null);
+    public tryResolve<TService>(ctor: Constructor<TService>): TService;
+    public tryResolve<TService, TArg1>(ctor: Constructor<TService>, arg1: TArg1): TService;
+    public tryResolve<TService, TArg1, TArg2>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2): TService;
+    public tryResolve<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3): TService;
+    public tryResolve<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4): TService {
+        var args = [ctor, null, arg1, arg2, arg3, arg4];
+
+        return this.tryResolveNamed.apply(this, args);
     }
 
-    public tryResolveNamed<TService>(ctor: Constructor<TService>, name: string): TService {
-        return this.resolveImpl<TService>(ctor, name, false);
+    public tryResolveNamed<TService>(ctor: Constructor<TService>, name: string): TService;
+    public tryResolveNamed<TService, TArg1>(ctor: Constructor<TService>, name: string, arg1: TArg1): TService;
+    public tryResolveNamed<TService, TArg1, TArg2>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2): TService;
+    public tryResolveNamed<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3): TService;
+    public tryResolveNamed<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, name: string, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4): TService {
+        var args = Array.prototype.slice.call(arguments, 1);
+
+        return this.resolveImpl<TService>(ctor, name, false, args);
     }
 
-    public lazyResolve<TService>(ctor: Constructor<TService>): () => TService {
+    public lazyResolve<TService>(ctor: Constructor<TService>): TService;
+    public lazyResolve<TService, TArg1>(ctor: Constructor<TService>, arg1: TArg1): TService;
+    public lazyResolve<TService, TArg1, TArg2>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2): TService;
+    public lazyResolve<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3): TService;
+    public lazyResolve<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4): TService {
+        var args = [ctor, null, arg1, arg2, arg3, arg4];
+
         return this.lazyResolveNamed<TService>(ctor, null);
     }
 
-    public lazyResolveNamed<TService>(ctor: Constructor<TService>, name: string): () => TService {
-        this.throwIfNotRegistered<TService, Func<Container, TService>>(ctor, name);
+    public lazyResolveNamed<TService>(ctor: Constructor<TService>, name: string): TService;
+    public lazyResolveNamed<TService, TArg1>(ctor: Constructor<TService>, name: string, arg1: TArg1): TService;
+    public lazyResolveNamed<TService, TArg1, TArg2>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2): TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3): TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, name: string, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4): () => TService {
+        var args: Array<any>;
 
-        return () => this.resolveNamed<TService>(ctor, name);
+        this.throwIfNotRegistered<TService, Func<Container, TService>>(ctor, name);
+        args = [ctor, name, arg1, arg2, arg3, arg4];
+
+        return () => this.resolveNamed.apply(this, args);
     }
 
-    private resolveImpl<TService>(ctor: Constructor<TService>, name: string, throwIfMissing: boolean): TService {
+    private resolveImpl<TService>(ctor: Constructor<TService>, name: string, throwIfMissing: boolean, args: Array<any>): TService {
         let instance: TService;
         let entry = this.getEntry<TService, Func<Container, TService>>(ctor, name, throwIfMissing);
 
@@ -128,7 +173,9 @@ class Container implements IContainer {
         instance = entry.instance;
 
         if (!instance) {
-            instance = entry.factory(entry.container);
+            args = args || [];
+            args.splice(0, 0, entry.container);
+            instance = entry.factory.apply(null, args);
             entry.initializeInstance(instance);
         }
 
