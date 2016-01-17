@@ -114,7 +114,7 @@ class Container implements IContainer {
     public resolveNamed<TService, TArg1, TArg2>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2): TService;
     public resolveNamed<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3): TService;
     public resolveNamed<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, name: string, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4): TService {
-        var args = Array.prototype.slice.call(arguments, 1);
+        var args = Array.prototype.slice.call(arguments, 2);
 
         return this.resolveImpl<TService>(ctor, name, true, args);
     }
@@ -134,7 +134,7 @@ class Container implements IContainer {
     public tryResolveNamed<TService, TArg1, TArg2>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2): TService;
     public tryResolveNamed<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3): TService;
     public tryResolveNamed<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, name: string, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4): TService {
-        var args = Array.prototype.slice.call(arguments, 1);
+        var args = Array.prototype.slice.call(arguments, 2);
 
         return this.resolveImpl<TService>(ctor, name, false, args);
     }
