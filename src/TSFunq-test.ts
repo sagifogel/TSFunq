@@ -5,4 +5,4 @@ import { Container } from "./Container";
 import { ReuseScope } from "./ReuseScope";
 import { ServiceKey } from "./ServiceKey";
 
-export { IRegistrationResolver, IRegistry, IDisposable, Container, Owner, ReuseScope, ServiceKey };
+export { Container, Owner, ReuseScope, ServiceKey };
