@@ -1,6 +1,4 @@
-﻿import { Owner } from "./Owner";
-import { Container } from "./Container";
-import { ReuseScope } from "./ReuseScope";
+﻿import { Container } from "./Container";
 
 class ServiceEntry implements IRegistration {
     public owner: Owner;

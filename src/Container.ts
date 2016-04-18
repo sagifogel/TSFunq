@@ -1,15 +1,11 @@
-﻿import { Owner } from "./Owner";
-import { Dictionary } from "./Dictionary";
+﻿import { Dictionary } from "./Dictionary";
 import { ServiceKey } from "./ServiceKey";
-import { ReuseScope } from "./ReuseScope";
 import { ServiceEntry } from "./ServiceEntry";
 import { NameResolver } from "./NameResolver";
 import { GenericServiceEntry } from "./GenericServiceEntry";
 
 class Container implements IContainer {
     private parent: Container;
-    private defaultOwner = Owner.container;
-    private defaultReuse = ReuseScope.container;
     private disposables = new Array<IDisposable>();
     private childContainers = new Array<Container>();
     private services = new Dictionary<ServiceKey, ServiceEntry>();
@@ -23,7 +19,25 @@ class Container implements IContainer {
             reuse: ReuseScope.container
         });
 
+        this.defaultOwner = Owner.container;
+        this.defaultReuse = ReuseScope.container;
         this.services.add(new ServiceKey(Container), serviceEntry);
+    }
+
+    public get defaultOwner(): Owner {
+        return this.defaultOwner;
+    }
+
+    public set defaultOwner(defaultOwner: Owner) {
+        this.defaultOwner = defaultOwner;
+    }
+
+    public get defaultReuse(): ReuseScope {
+        return this.defaultReuse;
+    }
+
+    public set defaultReuse(reuseScope: ReuseScope) {
+        this.defaultReuse = reuseScope;
     }
 
     public createChildContainer(): Container {
@@ -39,11 +53,11 @@ class Container implements IContainer {
         while (this.disposables.length > 0) {
             let disposable = this.disposables.shift();
 
-            disposable.dispose();
+            disposable["dispose"]();
         }
 
         while (this.childContainers.length > 0) {
-            this.childContainers.shift().dispose();
+            this.childContainers.shift()["dispose"]();
         }
     }
 

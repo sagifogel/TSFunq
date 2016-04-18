@@ -1,9 +1,32 @@
-﻿interface IHashable {
+﻿declare enum Owner {
+    container = 0,
+    external = 1
+}
+
+declare enum ReuseScope {
+    container = 0,
+    hierarchy = 1,
+    none = 2
+}
+
+interface IHashable {
     getHashCode(): number;
 }
 
 interface IDisposable {
     dispose(): void;
+}
+
+
+interface IOwned {
+    ownedBy(owner: Owner): void;
+}
+
+interface IReused {
+    reusedWithin(scope: ReuseScope): IOwned;
+}
+
+interface IReusedOwned extends IReused, IOwned {
 }
 
 interface IRegistration extends IReusedOwned {
@@ -14,17 +37,6 @@ interface IGenericRegistration<TService> extends IRegistration, IInitializable<T
 
 interface IInitializable<TService> {
     initializedBy(initializer: Action<IRegistrationResolver, TService>): IReusedOwned;
-}
-
-interface IReusedOwned extends IReused, IOwned {
-}
-
-interface IOwned {
-    ownedBy(owner: number): void;
-}
-
-interface IReused {
-    reusedWithin(scope: number): IOwned;
 }
 
 interface IRegistry {

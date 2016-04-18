@@ -1,6 +1,4 @@
-﻿import { Owner } from "./Owner";
-import { Container } from "./Container";
-import { ReuseScope } from "./ReuseScope";
+﻿import { Container } from "./Container";
 import { ServiceEntry } from "./ServiceEntry";
 
 class GenericServiceEntry<TService, TFunc> extends ServiceEntry implements IGenericRegistration<TService> {
@@ -18,7 +16,7 @@ class GenericServiceEntry<TService, TFunc> extends ServiceEntry implements IGene
             this.instance = instance;
         }
 
-        if (this.owner === Owner.container && dynamicInstance.dispose) {
+        if (this.owner === Owner.container && dynamicInstance["dispose"]) {
             this.container.trackDisposable(<IDisposable>dynamicInstance);
         }
 
