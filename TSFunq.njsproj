@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\" />
+    <Folder Include="src\interfaces\" />
     <Folder Include="tests\" />
     <Folder Include="tests\jasmine\" />
     <Folder Include="tests\jasmine\specs\" />
@@ -54,6 +55,7 @@
     <TypeScriptCompile Include="src\Dictionary.ts" />
     <TypeScriptCompile Include="src\EquatbaleString.ts" />
     <TypeScriptCompile Include="src\GenericServiceEntry.ts" />
+    <TypeScriptCompile Include="src\interfaces\TSFunq.d.ts" />
     <TypeScriptCompile Include="src\NameResolver.ts" />
     <TypeScriptCompile Include="src\ServiceEntry.ts" />
     <TypeScriptCompile Include="src\ServiceKey.ts" />
