@@ -1,0 +1,10 @@
+src
+tests
+build
+obj
+bin
+gulpfile.js
+bower.json
+tsconfig.json
+tsd.json
+.gitignore
