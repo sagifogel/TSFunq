@@ -15,6 +15,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>b75ed700-0374-4f36-91bd-e1bd6013fadd</ProjectGuid>
     <ProjectHome>.</ProjectHome>
+    <StartupFile>
+    </StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -36,6 +38,7 @@
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="dist\" />
     <Folder Include="src\" />
     <Folder Include="src\interfaces\" />
     <Folder Include="tests\" />
@@ -44,6 +47,7 @@
     <Folder Include="type_definitions\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="dist\TSFunq.js" />
     <Compile Include="tests\jasmine\specs\container-fixture.js" />
     <Compile Include="tests\jasmine\specs\servicekey-fixture.js" />
     <Compile Include="tests\jasmine\self.js" />
