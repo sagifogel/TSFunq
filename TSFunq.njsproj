@@ -15,7 +15,6 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>b75ed700-0374-4f36-91bd-e1bd6013fadd</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>tests\jasmine\specs\container-fixture.js</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
