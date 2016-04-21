@@ -1,13 +1,12 @@
 {
   "name": "tsfunq",
   "author": "Sagi Fogel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Funq Dependency injection container port for TypeScript",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "gulp": "*",
-    "rimraf" : "^2.5.0",
+    "rimraf": "^2.5.0",
     "jasmine": "^2.4.1",
     "gulp-header": "^1.7.1",
     "browserify": "^12.0.1",
@@ -16,7 +15,7 @@
     "run-sequence": "^1.1.5",
     "gulp-jasmine": "^2.2.1",
     "vinyl-buffer": "^1.0.0",
-    "gulp-typescript": "^2.8.2",  
+    "gulp-typescript": "^2.8.2",
     "vinyl-source-stream": "^1.1.0"
   },
   "main": "./dist/TSFunq.js",
