@@ -23,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/sagifogel/TSFunq.git"
   },
-  "license": "MIT",
+  "license": "Microsoft Public License (Ms-PL)",
   "bugs": {
     "url": "https://github.com/sagifogel/TSFunq/issues"
   },
