@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="tests\jasmine\specs\container-fixture.js" />
     <Compile Include="tests\jasmine\specs\servicekey-fixture.js" />
-    <Compile Include="tests\jasmine\specs\self.js" />
+    <Compile Include="tests\jasmine\self.js" />
     <Compile Include="tests\jasmine\subjects.js" />
   </ItemGroup>
   <ItemGroup>

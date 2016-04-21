@@ -763,3 +763,16 @@ describe("ChildContainerCanReuseRegistrationsOnParentUsingTypedStringAsKey", fun
         expect(foo).not.toBeNull();
     });
 });
+
+describe("ParentContainerCanNotResolveRegistrationThatWasDoneByItsChild", function () {
+    it("parent container should create a child container, register a factory using its child container, and fail to resolve the instance", function () {
+        var foo;
+        var container = new TSFunq.Container();
+        var child = container.createChildContainer();
+        
+        child.register(Subjects.Foo, function (c) { return new Subjects.Foo(); })
+        foo = container.tryResolve("Subjects.Foo");
+        
+        expect(foo).toBeNull();
+    });
+});

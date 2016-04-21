@@ -28,7 +28,7 @@ Initializable.prototype = {
 };
 
 function Presenter(view) {
-    this.View = view;
+    this.view = view;
 }
 
 Presenter.prototype.view = null;
