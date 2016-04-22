@@ -39,6 +39,15 @@ container.register(TypeScriptDeveloper, c => new TypeScriptDeveloper());
 let resolved = container.resolve(TypeScriptDeveloper);
 ```
 
+### Register and resolve a dependency using a key
+```ts
+let developer : IDeveloper;
+let container = new TSFunq.Container(); 	
+
+container.register("TypeScriptDeveloper", c => new TypeScriptDeveloper());
+developer = container.resolve("TypeScriptDeveloper");
+```
+
 ### Register and resolve a complex dependency
 ```ts
 container.register(Person, c => {
@@ -68,7 +77,7 @@ developer !== container.resolve(TypeScriptDeveloper); /// true
 
 ### Try to resolve a dependency
 The container will throw an exception if it will not be able to resolve a dependency.<br/>
-You can use the ```tryResolve``` or tryResolvedNamed functions in order to avoid an exception:
+You can use the ```tryResolve``` or ```tryResolvedNamed``` functions in order to avoid an exception:
 ```ts
 let container = new TSFunq.Container();
 let developer = container.tryResolve(TypeScriptDeveloper);
@@ -82,6 +91,43 @@ let namedDeveloper = container.tryResolveNamed(TypeScriptDeveloper, "foo");
 if (namedDeveloper) {
 ...
 }
+```
+### Register and resolve a named dependency with arguments
+You can register a dependency that accepts 1 to 4 parameters
+```ts
+class OneArgumentClass {
+    constructor(private arg1: string) {
+    }
+}
+
+class TwoArgumentsClass {
+    constructor(private arg1: string, private arg2: number) {
+    }
+}
+
+class ThreeArgumentsClass {
+    constructor(private arg1: string, private arg2: number, private arg3: Date) {
+    }
+}
+
+class FourArgumentsClass {
+    constructor(private arg1: string, private arg2: number, private arg3: Date, private arg4: any) {
+    }
+}
+
+let container = new TSFunq.Container();
+
+container.register<OneArgumentClass, string>(OneArgumentClass, (c, arg1) => new OneArgumentClass(arg1));
+container.register<TwoArgumentsClass, string, number>(TwoArgumentsClass, (c, arg1, arg2) => new TwoArgumentsClass(arg1, arg2));
+container.register<ThreeArgumentsClass, string, number, Date>(ThreeArgumentsClass, (c, arg1, arg2, arg3) => new ThreeArgumentsClass(arg1, arg2, arg3));
+container.register<FourArgumentsClass, string, number, Date, any>(FourArgumentsClass, (c, arg1, arg2, arg3, arg4) => new FourArgumentsClass(arg1, arg2, arg3, arg4));
+```
+And resolve the dependencies using the appropriate arguments
+```ts
+container.resolve<OneArgumentClass, string>(OneArgumentClass, "value");
+container.resolve<TwoArgumentsClass, string, number>(TwoArgumentsClass, "value", 10);
+container.resolve<ThreeArgumentsClass, string, number, Date>(ThreeArgumentsClass, "value", 10, new Date());
+container.resolve<FourArgumentsClass, string, number, Date, any>(FourArgumentsClass, "value", 10, new Date(), {});
 ```
 
 ### Creating child containers

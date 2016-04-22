@@ -1,9 +1,10 @@
 {
   "name": "tsfunq",
   "author": "Sagi Fogel",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Funq Dependency injection container port for TypeScript",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "gulp": "*",
     "rimraf": "^2.5.0",
