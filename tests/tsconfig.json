@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "exportAs": "TSFunq",
+    "module": "commonjs",
+    "noEmitOnError": true,
+    "removeComments": true,
+    "outFile": "../build/TSFunq.js",
+    "entry": "../src/TSFunq-test.ts"
+  },
+  "files": [
+    "../src/interfaces/TSFunq.d.ts",
+    "../src/Container.ts",
+    "../src/Dictionary.ts",
+    "../src/EquatbaleString.ts",
+    "../src/GenericServiceEntry.ts",
+    "../src/NameResolver.ts",
+    "../src/ServiceEntry.ts",
+    "../src/ServiceKey.ts",
+    "../src/TSFunq-test.ts"
+  ]
+}

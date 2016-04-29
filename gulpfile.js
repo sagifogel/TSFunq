@@ -1,92 +1,32 @@
 "use strict";
 
-var entryFile,
+var projectPath = "",
     gulp = require('gulp'),
-    rimraf = require("rimraf"),
-    rename = require("gulp-rename"),
-    jasmine = require('gulp-jasmine'),
-    tsc = require('gulp-typescript'),
-    source = require("vinyl-source-stream"),
-    buffer = require("vinyl-buffer"),
-    browserify = require("browserify"),
+    path = require("path"),
     header = require("gulp-header"),
+    jasmine = require('gulp-jasmine'),
     runSequence = require("run-sequence"),
-    uglify = require("gulp-uglify");
+    tscc = require("gulp-typescript-closure-compiler"),
+    closureCompiler = require("google-closure-compiler").gulp();
 
 //******************************************************************************
 //* BUILD
 //******************************************************************************
 
-gulp.task('build-source', function () {
-    return gulp.src(['type_definitions/**/*.ts',
-            'src/**/Container.ts',
-            'src/**/Dictionary.ts',
-            'src/**/EquatbaleString.ts',
-            'src/**/GenericServiceEntry.ts',
-            'src/**/NameResolver.ts',
-            'src/**/Owner.ts',
-            'src/**/ReuseScope.ts',
-            'src/**/ServiceEntry.ts',
-            'src/**/ServiceKey.ts',
-            'src/**/' + entryFile + ".ts"])
-        .pipe(tsc({
-            target: "ES5",
-            module: "commonjs",
-            noImplicitAny: false,
-            removeComments: false,
-            declarationFiles: false
-        }))
-        .pipe(gulp.dest('build/source/'));
+gulp.task("build-project", function () {
+    var project = tscc.createProject(__dirname + projectPath);
+    
+    return project.src()
+                  .pipe(tscc(project));
 });
 
 gulp.task("build-release", function (cb) {
-    entryFile = "TSFunq-release";
-    runSequence("build-source", cb);
+    runSequence("build-project", cb);
 });
 
 gulp.task("build-test", function (cb) {
-    entryFile = "TSFunq-test";
-    runSequence("build-source", cb);
-});
-
-gulp.task('delete-build', function (cb) {
-    rimraf('./build', cb);
-});
-
-gulp.task('delete-bundle', function (cb) {
-    rimraf('./bundle', cb);
-});
-
-gulp.task('rename-entryfile', function (cb) {
-    return gulp.src("./build/source/" + entryFile + ".js")
-               .pipe(rename("./build/source/TSFunq.js"))
-               .pipe(gulp.dest("./"));
-});
-
-//******************************************************************************
-//* BUNDLE
-//******************************************************************************
-
-gulp.task("bundle-source", function () {
-    var b = browserify({
-        standalone: 'TSFunq',
-        entries: __dirname + "/build/source/TSFunq.js",
-        debug: true
-    });
-
-    return b.bundle()
-            .pipe(source("TSFunq.js"))
-            .pipe(buffer())
-            .pipe(gulp.dest(__dirname + "/bundle/source/"));
-});
-
-
-gulp.task("bundle-test", function (cb) {
-    runSequence("build-test", "rename-entryfile", "bundle-source", "delete-build", cb);
-});
-
-gulp.task("bundle-release", function (cb) {
-    runSequence("build-release", "rename-entryfile", "bundle-source", "delete-build", cb);
+    projectPath = "\\tests";
+    runSequence("build-project", cb);
 });
 
 //******************************************************************************
@@ -95,16 +35,16 @@ gulp.task("bundle-release", function (cb) {
 
 gulp.task('container-fixture', function () {
     return gulp.src('tests/jasmine/specs/container-fixture.js')
-		       .pipe(jasmine());
+               .pipe(jasmine());
 });
 
 gulp.task('servicekey-fixture', function () {
     return gulp.src('tests/jasmine/specs/servicekey-fixture.js')
-		       .pipe(jasmine());
+               .pipe(jasmine());
 });
 
 gulp.task("test", function (cb) {
-    runSequence("bundle-test", "compress", "delete-bundle", "header", "container-fixture", "servicekey-fixture", cb);
+    runSequence("build-test", "compress", "header", "container-fixture", "servicekey-fixture", cb);
 });
 
 //******************************************************************************
@@ -112,8 +52,12 @@ gulp.task("test", function (cb) {
 //******************************************************************************
 
 gulp.task("compress", function () {
-    return gulp.src(__dirname + "/bundle/source/TSFunq.js")
-               .pipe(uglify({ preserveComments: false }))
+    return gulp.src(["./build/TSFunq.js"])
+               .pipe(closureCompiler({
+                    compilation_level: 'ADVANCED',
+                    output_wrapper: '!function(){%output%}();',
+                    js_output_file: "TSFunq.js",
+                }))
                .pipe(gulp.dest(__dirname + "/dist/"))
 });
 
@@ -121,18 +65,18 @@ gulp.task("compress", function () {
 gulp.task("header", function () {
     var pkg = require(__dirname + "/package.json");
     var banner = ["/**",
-      " * <%= pkg.name %> v.<%= pkg.version %> - <%= pkg.description %>",
-      " * Copyright (c) 2015 <%= pkg.author %>",
-      " * <%= pkg.license %> License",
-      " * <%= pkg.homepage %>",
-      " */",
-      ""].join("\n");
-
+        " * TSFunq v.<%= pkg.version %> - <%= pkg.description %>",
+        " * Copyright (c) <%= new Date().getFullYear() %> <%= pkg.author %>",
+        " * <%= pkg.license %> License",
+        " * <%= pkg.homepage %>",
+        " */",
+        ""].join("\n");
+    
     return gulp.src(__dirname + "/dist/TSFunq.js")
                .pipe(header(banner, { pkg: pkg }))
                .pipe(gulp.dest(__dirname + "/dist/"));
 });
 
 gulp.task("release", function (cb) {
-    runSequence("bundle-release", "compress", "delete-bundle", "header", cb);
+    runSequence("build-release", "compress", "header",  cb);
 });

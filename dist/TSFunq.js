@@ -1,11 +1,11 @@
 /**
- * TSFunq v.1.0.4 - Funq Dependency injection container port for TypeScript
- * Copyright (c) 2015 Sagi Fogel
- * MIT License
- * https://github.com/sagifogel/TSFunq
+ * TSFunq v.1.0.5 - Funq Dependency injection container port for TypeScript
+ * Copyright (c) 2016 Sagi Fogel
+ * MS-PL License
+ * https://github.com/sagifogel/TSFunq#readme
  */
 !function(){var d,g={b:0,external:1},h={b:0,P:1,R:2},k=this&&this.O||function(a,b){function c(){this.constructor=a}for(var f in b)b.hasOwnProperty(f)&&(a[f]=b[f]);a.prototype=null===b?Object.create(b):(c.prototype=b.prototype,new c)};function n(){}function p(a,b,c){a[b.m()]=c}function q(a,b,c){return(a=a[b.m()])?(c.L=a,!0):!1}
-function r(a){var b;if("string"===typeof a)b=a;else{var c;if(!((c=a.name)||(c=a.toString().match(t),c=c&&0<c.length&&c[1]))){c=[];a=a.prototype;for(b in a)c.push(b);c=c.join("")}b=c}return b}var t=/function ([^\(]+)/;function u(a){this.a=a}u.prototype.m=function(){for(var a=this.a,b=0,c=0,f=a.length;c<f;)b=(b<<5)-b+a.charCodeAt(c++)<<0;return b};function v(a,b){var c=r(a);this.a=(new u(c)).m();b&&(this.a^=(new u(b)).m())}v.prototype.m=function(){return this.a};function w(){}
+function r(a){var b;if("string"===typeof a)b=a;else{var c;if(!((c=a.name)||(c=a.toString().match(t),c=c&&0<c.length&&c[1]))){c=[];a=a.prototype;for(b in a)c.push(b);c=c.join("")}b=c}return b}var t=/function ([^\(]+)/;function u(a){this.value=a}u.prototype.m=function(){for(var a=this.value,b=0,c=0,f=a.length;c<f;)b=(b<<5)-b+a.charCodeAt(c++)<<0;return b};function v(a,b){var c=r(a);this.a=(new u(c)).m();b&&(this.a^=(new u(b)).m())}v.prototype.m=function(){return this.a};function w(){}
 w.prototype.g=function(a){this.f=a};w.prototype.h=function(a){this.c=a;return this};function x(a){this.i=a}k(x,w);x.prototype.a=function(a){2!==this.c&&(this.o=a);0===this.f&&a.dispose&&this.b.D(a);this.j&&this.j(this.b,a)};x.prototype.l=function(a){this.j=a;return this};x.prototype.v=function(a){return z({c:this.c,f:this.f,i:this.i,b:a,j:this.j})};function z(a){var b=new x(a.i);b.f=a.f;b.c=a.c;b.o=a.o;b.b=a.b;b.j=a.j;return b}
 function A(){this.s=[];this.l=[];this.h=new n;var a=z({o:this,i:function(a){return a},b:this,f:1,c:0});this.g=this.a=0;p(this.h,new v(A),a)}Object.defineProperty(A.prototype,"defaultOwner",{get:function(){return this.a},set:function(a){this.a=a},enumerable:!0,configurable:!0});Object.defineProperty(A.prototype,"defaultReuse",{get:function(){return this.g},set:function(a){this.g=a},enumerable:!0,configurable:!0});d=A.prototype;d.I=function(){var a=new A;a.w=this;this.l.push(a);return a};
 d.J=function(){for(;0<this.s.length;)this.s.shift().dispose();for(;0<this.l.length;)this.l.shift().dispose()};d.G=function(a,b){return this.B(a,null,b)};d.M=function(a){this.C(null,a)};d.C=function(a,b){var c=B(this,Object.getPrototypeOf(b).constructor,a,null);c.h(1).g(1);c.a(b)};d.B=function(a,b,c){return B(this,a,b,c)};function B(a,b,c,f){if(b===A)throw Error("Container service is built-in and read-only.");f=z({b:a,i:f,c:a.g,f:a.a});b=new v(b,c);p(a.h,b,f);return f}

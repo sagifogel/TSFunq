@@ -8,5 +8,4 @@ src/*.js.map
 node_modules/
 spec/
 build/
-bundle/
 *.dat
