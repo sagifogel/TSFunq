@@ -4,8 +4,10 @@
     "module": "commonjs",
     "noEmitOnError": true,
     "removeComments": true,
+    "emitOneSideEnums":  true,
     "outFile": "build/TSFunq.js",
-    "entry": "src/TSFunq-release.ts"
+    "entry": "src/TSFunq-release.ts",
+    "externsOutFile": "build/externs.js"
   },
   "files": [
     "src/interfaces/TSFunq.d.ts",
@@ -17,5 +19,6 @@
     "src/ServiceEntry.ts",
     "src/ServiceKey.ts",
     "src/TSFunq-release.ts"
-  ]
+  ],
+  "externs": ["type_definitions/TSFunq.d.ts" ]
 }
