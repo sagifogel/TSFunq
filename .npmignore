@@ -9,6 +9,7 @@ tests/
 bundle/
 *.dat
 .gitignore
+.npmignore
 gulpfile.js
 tsconfig.json
 *.sln
