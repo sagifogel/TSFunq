@@ -1,4 +1,6 @@
-﻿import { Dictionary } from "./Dictionary";
+﻿import { Owner } from "./Owner";
+import { Dictionary } from "./Dictionary";
+import { ReuseScope } from "./ReuseScope";
 import { ServiceKey } from "./ServiceKey";
 import { ServiceEntry } from "./ServiceEntry";
 import { NameResolver } from "./NameResolver";

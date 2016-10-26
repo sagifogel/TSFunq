@@ -1,15 +1,4 @@
-﻿declare enum Owner {
-    container = 0,
-    external = 1
-}
-
-declare enum ReuseScope {
-    container = 0,
-    hierarchy = 1,
-    none = 2
-}
-
-interface IHashable {
+﻿interface IHashable {
     getHashCode(): number;
 }
 
@@ -19,11 +8,11 @@ interface IDisposable {
 
 
 interface IOwned {
-    ownedBy(owner: Owner): void;
+    ownedBy(owner: number): void;
 }
 
 interface IReused {
-    reusedWithin(scope: ReuseScope): IOwned;
+    reusedWithin(scope: number): IOwned;
 }
 
 interface IReusedOwned extends IReused, IOwned {
@@ -55,8 +44,8 @@ interface IRegistry {
 }
 
 interface IContainer extends IRegistrationResolver, IRegistry, IDisposable {
-    defaultOwner: Owner;
-    defaultReuse: ReuseScope;
+    defaultOwner: number;
+    defaultReuse: number;
     createChildContainer(): IContainer;
 }
 

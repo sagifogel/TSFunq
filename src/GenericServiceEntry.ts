@@ -1,4 +1,6 @@
-﻿import { Container } from "./Container";
+﻿import { Owner } from "./Owner";
+import { Container } from "./Container";
+import { ReuseScope } from "./ReuseScope";
 import { ServiceEntry } from "./ServiceEntry";
 
 class GenericServiceEntry<TService, TFunc> extends ServiceEntry implements IGenericRegistration<TService> {

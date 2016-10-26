@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="dist\TSFunq.js" />
     <Compile Include="gulpfile.js" />
+    <Compile Include="src\Owner.js" />
+    <Compile Include="src\ReuseScope.js" />
     <Compile Include="tests\jasmine\specs\container-fixture.js" />
     <Compile Include="tests\jasmine\specs\servicekey-fixture.js" />
     <Compile Include="tests\jasmine\subjects.js" />
