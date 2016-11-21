@@ -1,6 +1,13 @@
-﻿function Foo(value) { this.value = value; }
+﻿function Foo(value, c) { this.value = value; this.count = c; }
 
-function Bar() { }
+function Bar(arg1, arg2, arg3, arg4, arg5, arg6) {
+    this.arg1 = arg1;
+    this.arg2 = arg2;
+    this.arg3 = arg3;
+    this.arg4 = arg4;
+    this.arg5 = arg5;
+    this.arg6 = arg6;
+}
 
 function Base() {
     this.isDisposed = false;

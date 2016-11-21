@@ -43,8 +43,12 @@ gulp.task('servicekey-fixture', function () {
                .pipe(jasmine());
 });
 
-gulp.task("test", function (cb) {
+gulp.task("build-and-test", function (cb) {
     runSequence("build-test", "compress", "header", "container-fixture", "servicekey-fixture", cb);
+});
+
+gulp.task("test", function (cb) {
+    runSequence("container-fixture", "servicekey-fixture", cb);
 });
 
 //******************************************************************************
