@@ -22,7 +22,7 @@ describe("ShouldRegister", function () {
 });
 
 describe("RegisteredInstanceIsResolved", function () {
-    it("should register a an instance and resolved the same insatnce as the registered one", function () {
+    it("should register an instance and resolved the same insatnce as the registered one", function () {
         var f2;
         var f1 = new Subjects.Foo();
         var container = new TSFunq.Container();
@@ -77,7 +77,7 @@ describe("RegistersDelegateForType", function () {
 });
 
 describe("RegistersNamedInstances", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register two factories with different name, resolve both of them and compare. The expected result should be two instances of the same type", function () {
         var foo;
         var foo2;
         var container = new TSFunq.Container();
@@ -92,7 +92,7 @@ describe("RegistersNamedInstances", function () {
 });
 
 describe("RegistersWithCtorArguments", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register a factory for a specific that accepts additional parameter. The resulotion function should be invoked using an argument and the resolved type should contain the argument sent", function () {
         var foo;
         var container = new TSFunq.Container();
         
@@ -104,16 +104,16 @@ describe("RegistersWithCtorArguments", function () {
 });
 
 describe("RegistersWithCtorOverloads", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register two factories with, each one has different arity. Each call to resolve function with the right amount of arguments should resolve an instance", function () {
         var foo;
         var foo2;
         var container = new TSFunq.Container();
         
-        container.register("Foo1", function (c, s) { return new Subjects.Foo(s); });
-        container.register("Foo2", function (c, s, i) { return new Subjects.Foo(s, i); });
+        container.register(Subjects.Foo, function (c, s) { return new Subjects.Foo(s); });
+        container.register(Subjects.Foo, function (c, s, i) { return new Subjects.Foo(s, i); });
         
-        foo = container.resolve("Foo1", "value");
-        foo2 = container.resolve("Foo2", "foo", 25);
+        foo = container.resolve(Subjects.Foo, "value");
+        foo2 = container.resolve(Subjects.Foo, "foo", 25);
         
         expect(foo.value).toEqual("value");
         expect(foo2.value).toEqual("foo");
@@ -122,7 +122,7 @@ describe("RegistersWithCtorOverloads", function () {
 });
 
 describe("RegistersAllOverloads", function () {
-    it("should throw a ResolutionException when type is not registered", function () {
+    it("should register all named/unnamed factories, with different arity. Each call to resolve function with the right amount of arguments should resolve the correct instance", function () {
         var b;
         var container = new TSFunq.Container();
         
@@ -869,26 +869,68 @@ describe("LazyResolveNamed", function () {
 });
 
 describe("LazyResolveAllOverloads", function () {
-    it("should register two named factories, resolve two different facotries using lazyResolve, and call each facotry and resolve the expected instance", function () {
+    it("should register all factories, with different arity. Each call to lazyResolve function should resolve a factory. Invoking the factory with the right amount of arguments should resolve the correct instance", function () {
+        var hashSet = new Set();
+        var container = new TSFunq.Container();
+        var bar, bar1, bar2, bar3, bar4, bar5, bar6;
+        
+        container.register(Subjects.Bar, function (c) { return new Subjects.Bar(); });
+        container.register(Subjects.Bar, function (c, s1) { return new Subjects.Bar(s1); });
+        container.register(Subjects.Bar, function (c, s1, s2) { return new Subjects.Bar(s1, s2); });
+        container.register(Subjects.Bar, function (c, s1, s2, s3) { return new Subjects.Bar(s1, s2, s3); });
+        container.register(Subjects.Bar, function (c, s1, s2, s3, s4) { return new Subjects.Bar(s1, s2, s3, s4); });
+        container.register(Subjects.Bar, function (c, s1, s2, s3, s4, s5) { return new Subjects.Bar(s1, s2, s3, s4, s5); });
+        container.register(Subjects.Bar, function (c, s1, s2, s3, s4, s5, s6) { return new Subjects.Bar(s1, s2, s3, s4, s5, s6); });
+        
+        bar = container.lazyResolve(Subjects.Bar)();
+        bar1 = container.lazyResolve(Subjects.Bar)("a1");
+        bar2 = container.lazyResolve(Subjects.Bar)("a1", "a2");
+        bar3 = container.lazyResolve(Subjects.Bar)("a1", "a2", "a3");
+        bar4 = container.lazyResolve(Subjects.Bar)("a1", "a2", "a3", "a4");
+        bar5 = container.lazyResolve(Subjects.Bar)("a1", "a2", "a3", "a4", "a5");
+        bar6 = container.lazyResolve(Subjects.Bar)("a1", "a2", "a3", "a4", "a5", "a6");
+        
+        expect(bar).not.toBeNull();
+        expect(bar1).not.toBeNull();
+        expect(bar2).not.toBeNull();
+        expect(bar3).not.toBeNull();
+        expect(bar4).not.toBeNull();
+        expect(bar5).not.toBeNull();
+        expect(bar6).not.toBeNull();
+        
+        hashSet.add(bar);
+        hashSet.add(bar1);
+        hashSet.add(bar2);
+        hashSet.add(bar3);
+        hashSet.add(bar4);
+        hashSet.add(bar5);
+        hashSet.add(bar6);
+        
+        expect(hashSet.size).toEqual(7);
+    });
+});
+
+describe("LazyResolveNamedAllOverloads", function () {
+    it("should register all named factories, with different arity. Each call to lazyResolve function should resolve a factory. Invoking the factory with the right amount of arguments should resolve the correct instance", function () {
         var hashSet = new Set();
         var container = new TSFunq.Container();
         var bar, bar1, bar2, bar3, bar4, bar5, bar6;
         
         container.registerNamed(Subjects.Bar, "Bar", function (c) { return new Subjects.Bar(); });
-        container.registerNamed(Subjects.Bar, "Bar1", function (c, s1) { return new Subjects.Bar(s1); });
-        container.registerNamed(Subjects.Bar, "Bar2", function (c, s1, s2) { return new Subjects.Bar(s1, s2); });
-        container.registerNamed(Subjects.Bar, "Bar3", function (c, s1, s2, s3) { return new Subjects.Bar(s1, s2, s3); });
-        container.registerNamed(Subjects.Bar, "Bar4", function (c, s1, s2, s3, s4) { return new Subjects.Bar(s1, s2, s3, s4); });
-        container.registerNamed(Subjects.Bar, "Bar5", function (c, s1, s2, s3, s4, s5) { return new Subjects.Bar(s1, s2, s3, s4, s5); });
-        container.registerNamed(Subjects.Bar, "Bar6", function (c, s1, s2, s3, s4, s5, s6) { return new Subjects.Bar(s1, s2, s3, s4, s5, s6); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1) { return new Subjects.Bar(s1); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2) { return new Subjects.Bar(s1, s2); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3) { return new Subjects.Bar(s1, s2, s3); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4) { return new Subjects.Bar(s1, s2, s3, s4); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4, s5) { return new Subjects.Bar(s1, s2, s3, s4, s5); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4, s5, s6) { return new Subjects.Bar(s1, s2, s3, s4, s5, s6); });
         
         bar = container.lazyResolveNamed(Subjects.Bar, "Bar")();
-        bar1 = container.lazyResolveNamed(Subjects.Bar, "Bar1")("a1");
-        bar2 = container.lazyResolveNamed(Subjects.Bar, "Bar2")("a1", "a2");
-        bar3 = container.lazyResolveNamed(Subjects.Bar, "Bar3")("a1", "a2", "a3");
-        bar4 = container.lazyResolveNamed(Subjects.Bar, "Bar4")("a1", "a2", "a3", "a4");
-        bar5 = container.lazyResolveNamed(Subjects.Bar, "Bar5")("a1", "a2", "a3", "a4", "a5");
-        bar6 = container.lazyResolveNamed(Subjects.Bar, "Bar6")("a1", "a2", "a3", "a4", "a5", "a6");
+        bar1 = container.lazyResolveNamed(Subjects.Bar, "Bar")("a1");
+        bar2 = container.lazyResolveNamed(Subjects.Bar, "Bar")("a1", "a2");
+        bar3 = container.lazyResolveNamed(Subjects.Bar, "Bar")("a1", "a2", "a3");
+        bar4 = container.lazyResolveNamed(Subjects.Bar, "Bar")("a1", "a2", "a3", "a4");
+        bar5 = container.lazyResolveNamed(Subjects.Bar, "Bar")("a1", "a2", "a3", "a4", "a5");
+        bar6 = container.lazyResolveNamed(Subjects.Bar, "Bar")("a1", "a2", "a3", "a4", "a5", "a6");
         
         expect(bar).not.toBeNull();
         expect(bar1).not.toBeNull();
