@@ -79,15 +79,15 @@ describe("RegistersDelegateForType", function () {
 describe("RegistersNamedInstances", function () {
     it("should throw a ResolutionException when type is not registered", function () {
         var foo;
+        var foo2;
         var container = new TSFunq.Container();
         
-        try {
-            foo = container.resolveNamed(Subjects.Foo, "foo");
-            fail("Should have thrown ResolutionException");
-        }
-        catch (re) {
-            expect(re.message.indexOf("foo")).not.toEqual(-1);
-        }
+        container.registerNamed(Subjects.Foo, "foo", function (c) { return new Subjects.Foo(); });
+        container.registerNamed(Subjects.Foo, "foo2", function (c) { return new Subjects.Foo(); });
+        
+        foo = container.resolveNamed(Subjects.Foo, "foo");
+        foo2 = container.resolveNamed(Subjects.Foo, "foo2");
+        expect(foo).not.toBe(foo2);
     });
 });
 
@@ -127,42 +127,51 @@ describe("RegistersAllOverloads", function () {
         var container = new TSFunq.Container();
         
         container.registerNamed(Subjects.Bar, "Bar", function (c) { return new Subjects.Bar(); });
-        container.registerNamed(Subjects.Bar, "Bar1", function (c, s1) { return new Subjects.Bar(s1); });
-        container.registerNamed(Subjects.Bar, "Bar2", function (c, s1, s2) { return new Subjects.Bar(s1, s2); });
-        container.registerNamed(Subjects.Bar, "Bar3", function (c, s1, s2, s3) { return new Subjects.Bar(s1, s2, s3); });
-        container.registerNamed(Subjects.Bar, "Bar4", function (c, s1, s2, s3, s4) { return new Subjects.Bar(s1, s2, s3, s4); });
-        container.registerNamed(Subjects.Bar, "Bar5", function (c, s1, s2, s3, s4, s5) { return new Subjects.Bar(s1, s2, s3, s4, s5); });
-        container.registerNamed(Subjects.Bar, "Bar6", function (c, s1, s2, s3, s4, s5, s6) { return new Subjects.Bar(s1, s2, s3, s4, s5, s6); });
-        container.registerNamed(Subjects.Bar, "Bar10", function (c, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) { return new Subjects.Bar(a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1) { return new Subjects.Bar(s1); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2) { return new Subjects.Bar(s1, s2); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3) { return new Subjects.Bar(s1, s2, s3); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4) { return new Subjects.Bar(s1, s2, s3, s4); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4, s5) { return new Subjects.Bar(s1, s2, s3, s4, s5); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4, s5, s6) { return new Subjects.Bar(s1, s2, s3, s4, s5, s6); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) { return new Subjects.Bar(a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10); });
         
-        expect(container.resolveNamed(Subjects.Bar, "Bar")).toBeTruthy();
+        container.register(Subjects.Bar, function (c) { return new Subjects.Bar(); });
+        container.register(Subjects.Bar, function (c, s1) { return new Subjects.Bar(s1); });
+        container.register(Subjects.Bar, function (c, s1, s2) { return new Subjects.Bar(s1, s2); });
+        container.register(Subjects.Bar, function (c, s1, s2, s3) { return new Subjects.Bar(s1, s2, s3); });
+        container.register(Subjects.Bar, function (c, s1, s2, s3, s4) { return new Subjects.Bar(s1, s2, s3, s4); });
+        container.register(Subjects.Bar, function (c, s1, s2, s3, s4, s5) { return new Subjects.Bar(s1, s2, s3, s4, s5); });
+        container.register(Subjects.Bar, function (c, s1, s2, s3, s4, s5, s6) { return new Subjects.Bar(s1, s2, s3, s4, s5, s6); });
+        container.register(Subjects.Bar, function (c, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) { return new Subjects.Bar(a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10); });
         
-        b = container.resolveNamed(Subjects.Bar, "Bar1", "a1");
+        expect(container.resolve(Subjects.Bar)).toBeTruthy();
+        
+        b = container.resolve(Subjects.Bar, "a1");
         expect(b.arg1).toEqual("a1");
         
-        b = container.resolveNamed(Subjects.Bar, "Bar2", "a1", "a2");
+        b = container.resolve(Subjects.Bar, "a1", "a2");
         expect(b.arg1).toEqual("a1");
         expect(b.arg2).toEqual("a2");
         
-        b = container.resolveNamed(Subjects.Bar, "Bar3", "a1", "a2", "a3");
+        b = container.resolve(Subjects.Bar, "a1", "a2", "a3");
         expect(b.arg1).toEqual("a1");
         expect(b.arg2).toEqual("a2");
         expect(b.arg3).toEqual("a3");
         
-        b = container.resolveNamed(Subjects.Bar, "Bar4", "a1", "a2", "a3", "a4");
+        b = container.resolve(Subjects.Bar, "a1", "a2", "a3", "a4");
         expect(b.arg1).toEqual("a1");
         expect(b.arg2).toEqual("a2");
         expect(b.arg3).toEqual("a3");
         expect(b.arg4).toEqual("a4");
         
-        b = container.resolveNamed(Subjects.Bar, "Bar5", "a1", "a2", "a3", "a4", "a5");
+        b = container.resolve(Subjects.Bar, "a1", "a2", "a3", "a4", "a5");
         expect(b.arg1).toEqual("a1");
         expect(b.arg2).toEqual("a2");
         expect(b.arg3).toEqual("a3");
         expect(b.arg4).toEqual("a4");
         expect(b.arg5).toEqual("a5");
         
-        b = container.resolveNamed(Subjects.Bar, "Bar6", "a1", "a2", "a3", "a4", "a5", "a6");
+        b = container.resolve(Subjects.Bar, "a1", "a2", "a3", "a4", "a5", "a6");
         expect(b.arg1).toEqual("a1");
         expect(b.arg2).toEqual("a2");
         expect(b.arg3).toEqual("a3");
@@ -170,7 +179,46 @@ describe("RegistersAllOverloads", function () {
         expect(b.arg5).toEqual("a5");
         expect(b.arg6).toEqual("a6");
         
-        b = container.resolveNamed(Subjects.Bar, "Bar10", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        b = container.resolve(Subjects.Bar, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        expect(b.arg1).toEqual(10)
+        
+        
+        expect(container.resolveNamed(Subjects.Bar, "Bar")).toBeTruthy();
+        
+        b = container.resolveNamed(Subjects.Bar, "Bar", "a1");
+        expect(b.arg1).toEqual("a1");
+        
+        b = container.resolveNamed(Subjects.Bar, "Bar", "a1", "a2");
+        expect(b.arg1).toEqual("a1");
+        expect(b.arg2).toEqual("a2");
+        
+        b = container.resolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3");
+        expect(b.arg1).toEqual("a1");
+        expect(b.arg2).toEqual("a2");
+        expect(b.arg3).toEqual("a3");
+        
+        b = container.resolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3", "a4");
+        expect(b.arg1).toEqual("a1");
+        expect(b.arg2).toEqual("a2");
+        expect(b.arg3).toEqual("a3");
+        expect(b.arg4).toEqual("a4");
+        
+        b = container.resolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3", "a4", "a5");
+        expect(b.arg1).toEqual("a1");
+        expect(b.arg2).toEqual("a2");
+        expect(b.arg3).toEqual("a3");
+        expect(b.arg4).toEqual("a4");
+        expect(b.arg5).toEqual("a5");
+        
+        b = container.resolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3", "a4", "a5", "a6");
+        expect(b.arg1).toEqual("a1");
+        expect(b.arg2).toEqual("a2");
+        expect(b.arg3).toEqual("a3");
+        expect(b.arg4).toEqual("a4");
+        expect(b.arg5).toEqual("a5");
+        expect(b.arg6).toEqual("a6");
+        
+        b = container.resolveNamed(Subjects.Bar, "Bar", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
         expect(b.arg1).toEqual(10);
     });
 });
@@ -239,25 +287,86 @@ describe("TryResolveNamedReturnsNullIfNotRegistered", function () {
 
 describe("TryResolveReturnsRegisteredInstance", function () {
     it("should resolve an instance when using the tryResolve[...] API", function () {
-        var bar;
+        var hashSet = new Set();
         var container = new TSFunq.Container();
+        var bar, bar1, bar2, bar3, bar4, bar5, bar6;
         
-        container.registerNamed(Subjects.Bar, "bar", function (c) { return new Subjects.Bar(); });
-        bar = container.tryResolveNamed(Subjects.Bar, "bar");
+        container.registerNamed(Subjects.Bar, "Bar", function (c) { return new Subjects.Bar(); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1) { return new Subjects.Bar(s1); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2) { return new Subjects.Bar(s1, s2); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3) { return new Subjects.Bar(s1, s2, s3); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4) { return new Subjects.Bar(s1, s2, s3, s4); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4, s5) { return new Subjects.Bar(s1, s2, s3, s4, s5); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4, s5, s6) { return new Subjects.Bar(s1, s2, s3, s4, s5, s6); });
+        
+        bar = container.tryResolveNamed(Subjects.Bar, "Bar");
+        bar1 = container.tryResolveNamed(Subjects.Bar, "Bar", "a1");
+        bar2 = container.tryResolveNamed(Subjects.Bar, "Bar", "a1", "a2");
+        bar3 = container.tryResolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3");
+        bar4 = container.tryResolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3", "a4");
+        bar5 = container.tryResolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3", "a4", "a5");
+        bar6 = container.tryResolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3", "a4", "a5", "a6");
+        
         expect(bar).not.toBeNull();
+        expect(bar1).not.toBeNull();
+        expect(bar2).not.toBeNull();
+        expect(bar3).not.toBeNull();
+        expect(bar4).not.toBeNull();
+        expect(bar5).not.toBeNull();
+        expect(bar6).not.toBeNull();
+        
+        hashSet.add(bar);
+        hashSet.add(bar1);
+        hashSet.add(bar2);
+        hashSet.add(bar3);
+        hashSet.add(bar4);
+        hashSet.add(bar5);
+        hashSet.add(bar6);
+        
+        expect(hashSet.size).toEqual(7);
     });
 });
 
 describe("TryResolveReturnsRegisteredInstanceOnParent", function () {
     it("should create container and a child container and to resolve an instance using the child container's tryResolve[...] API", function () {
-        var bar;
+        var hashSet = new Set();
         var container = new TSFunq.Container();
+        var bar, bar1, bar2, bar3, bar4, bar5, bar6;
         var child = container.createChildContainer();
         
-        container.registerNamed(Subjects.Bar, "bar", function (c) { return new Subjects.Bar(); });
-        bar = child.tryResolveNamed(Subjects.Bar, "bar");
+        container.registerNamed(Subjects.Bar, "Bar", function (c) { return new Subjects.Bar(); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1) { return new Subjects.Bar(s1); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2) { return new Subjects.Bar(s1, s2); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3) { return new Subjects.Bar(s1, s2, s3); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4) { return new Subjects.Bar(s1, s2, s3, s4); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4, s5) { return new Subjects.Bar(s1, s2, s3, s4, s5); });
+        container.registerNamed(Subjects.Bar, "Bar", function (c, s1, s2, s3, s4, s5, s6) { return new Subjects.Bar(s1, s2, s3, s4, s5, s6); });
+        
+        bar = child.tryResolveNamed(Subjects.Bar, "Bar");
+        bar1 = child.tryResolveNamed(Subjects.Bar, "Bar", "a1");
+        bar2 = child.tryResolveNamed(Subjects.Bar, "Bar", "a1", "a2");
+        bar3 = child.tryResolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3");
+        bar4 = child.tryResolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3", "a4");
+        bar5 = child.tryResolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3", "a4", "a5");
+        bar6 = child.tryResolveNamed(Subjects.Bar, "Bar", "a1", "a2", "a3", "a4", "a5", "a6");
         
         expect(bar).not.toBeNull();
+        expect(bar1).not.toBeNull();
+        expect(bar2).not.toBeNull();
+        expect(bar3).not.toBeNull();
+        expect(bar4).not.toBeNull();
+        expect(bar5).not.toBeNull();
+        expect(bar6).not.toBeNull();
+        
+        hashSet.add(bar);
+        hashSet.add(bar1);
+        hashSet.add(bar2);
+        hashSet.add(bar3);
+        hashSet.add(bar4);
+        hashSet.add(bar5);
+        hashSet.add(bar6);
+        
+        expect(hashSet.size).toEqual(7);
     });
 });
 
@@ -724,7 +833,7 @@ describe("LazyResolveProvidedForRegisteredServices", function () {
 });
 
 describe("LazyResolveHonorsReuseScope", function () {
-    it("should register a factory that is reused by container, resolve a factory using lazResolve and call this factory multiple times and resolve the same instance", function () {
+    it("should register a factory that is reused by container, resolve a factory using lazyResolve and call this factory multiple times and resolve the same instance", function () {
         var f1;
         var f2;
         var func;
@@ -759,12 +868,54 @@ describe("LazyResolveNamed", function () {
     });
 });
 
+describe("LazyResolveAllOverloads", function () {
+    it("should register two named factories, resolve two different facotries using lazyResolve, and call each facotry and resolve the expected instance", function () {
+        var hashSet = new Set();
+        var container = new TSFunq.Container();
+        var bar, bar1, bar2, bar3, bar4, bar5, bar6;
+        
+        container.registerNamed(Subjects.Bar, "Bar", function (c) { return new Subjects.Bar(); });
+        container.registerNamed(Subjects.Bar, "Bar1", function (c, s1) { return new Subjects.Bar(s1); });
+        container.registerNamed(Subjects.Bar, "Bar2", function (c, s1, s2) { return new Subjects.Bar(s1, s2); });
+        container.registerNamed(Subjects.Bar, "Bar3", function (c, s1, s2, s3) { return new Subjects.Bar(s1, s2, s3); });
+        container.registerNamed(Subjects.Bar, "Bar4", function (c, s1, s2, s3, s4) { return new Subjects.Bar(s1, s2, s3, s4); });
+        container.registerNamed(Subjects.Bar, "Bar5", function (c, s1, s2, s3, s4, s5) { return new Subjects.Bar(s1, s2, s3, s4, s5); });
+        container.registerNamed(Subjects.Bar, "Bar6", function (c, s1, s2, s3, s4, s5, s6) { return new Subjects.Bar(s1, s2, s3, s4, s5, s6); });
+        
+        bar = container.lazyResolveNamed(Subjects.Bar, "Bar")();
+        bar1 = container.lazyResolveNamed(Subjects.Bar, "Bar1")("a1");
+        bar2 = container.lazyResolveNamed(Subjects.Bar, "Bar2")("a1", "a2");
+        bar3 = container.lazyResolveNamed(Subjects.Bar, "Bar3")("a1", "a2", "a3");
+        bar4 = container.lazyResolveNamed(Subjects.Bar, "Bar4")("a1", "a2", "a3", "a4");
+        bar5 = container.lazyResolveNamed(Subjects.Bar, "Bar5")("a1", "a2", "a3", "a4", "a5");
+        bar6 = container.lazyResolveNamed(Subjects.Bar, "Bar6")("a1", "a2", "a3", "a4", "a5", "a6");
+        
+        expect(bar).not.toBeNull();
+        expect(bar1).not.toBeNull();
+        expect(bar2).not.toBeNull();
+        expect(bar3).not.toBeNull();
+        expect(bar4).not.toBeNull();
+        expect(bar5).not.toBeNull();
+        expect(bar6).not.toBeNull();
+        
+        hashSet.add(bar);
+        hashSet.add(bar1);
+        hashSet.add(bar2);
+        hashSet.add(bar3);
+        hashSet.add(bar4);
+        hashSet.add(bar5);
+        hashSet.add(bar6);
+        
+        expect(hashSet.size).toEqual(7);
+    });
+});
+
 describe("LazyResolveThrowsIfNotRegistered", function () {
     it("should throw a ResolutionException when type is not registered and resolved through lazyResolve", function () {
         var container = new TSFunq.Container();
         
         try {
-            container.lazyResolve(Subjects.Foo);
+            container.lazyResolve(Subjects.Foo)();
             fail("Should have failed to resolve the lazy func");
         }
         catch (ResolutionException) {
@@ -777,7 +928,7 @@ describe("LazyResolveNamedThrowsIfNotRegistered", function () {
         var container = new TSFunq.Container();
         
         try {
-            container.lazyResolve(Subjects.Foo, "foo");
+            container.lazyResolve(Subjects.Foo, "foo")();
             fail("Should have failed to resolve the lazy func");
         }
         catch (ResolutionException) {

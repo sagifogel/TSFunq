@@ -93,7 +93,7 @@ if (namedDeveloper) {
 }
 ```
 ### Register and resolve a named dependency with arguments
-You can register a dependency that accepts 1 to 4 parameters
+You can register a dependency that accepts 1 to 10 parameters
 ```ts
 class OneArgumentClass {
     constructor(private arg1: string) {

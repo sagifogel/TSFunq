@@ -11,7 +11,7 @@ describe("TSFunq", function () {
 
 describe("KeyNotEqualsNull", function () {
     it("should return false when new service key is compared to null", function () {
-        var key1 = new TSFunq.ServiceKey(Subjects.Disposable, null);
+        var key1 = new TSFunq.ServiceKey(Subjects.Disposable);
 
         expect(key1).not.toBeNull();
         expect(key1.getHashCode()).not.toBe(null);
@@ -20,7 +20,7 @@ describe("KeyNotEqualsNull", function () {
 
 describe("KeyNotEqualsOtherType", function () {
     it("should return false when new service key is compared to new object", function () {
-        var key1 = new TSFunq.ServiceKey(Subjects.Disposable, null);
+        var key1 = new TSFunq.ServiceKey(Subjects.Disposable);
 
         expect(key1).not.toEqual({});
     });
@@ -28,7 +28,7 @@ describe("KeyNotEqualsOtherType", function () {
 
 describe("KeyEqualsSameReference", function () {
     it("should return true when new service key is compared to itself", function () {
-        var key1 = new TSFunq.ServiceKey(Subjects.Disposable, null);
+        var key1 = new TSFunq.ServiceKey(Subjects.Disposable);
         var key2 = key1;
 
         expect(key1).toBe(key2);
@@ -38,8 +38,8 @@ describe("KeyEqualsSameReference", function () {
 
 describe("KeysAreEqualByType", function () {
     it("should return true when two service keys are created with the same function", function () {
-        var key1 = new TSFunq.ServiceKey(Subjects.Disposable, null);
-        var key2 = new TSFunq.ServiceKey(Subjects.Disposable, null);
+        var key1 = new TSFunq.ServiceKey(Subjects.Disposable);
+        var key2 = new TSFunq.ServiceKey(Subjects.Disposable);
 
         expect(key1).not.toBe(key2);
         expect(key1.getHashCode()).toEqual(key2.getHashCode());
@@ -68,8 +68,8 @@ describe("KeysAreNotEqualByTypeAndDifferentName", function () {
 
 describe("KeysAreEqualByTypedString", function () {
     it("should return true when two service keys are created with the same function and service name", function () {
-        var key1 = new TSFunq.ServiceKey("Subjects.Disposable", null);
-        var key2 = new TSFunq.ServiceKey("Subjects.Disposable", null);
+        var key1 = new TSFunq.ServiceKey("Subjects.Disposable");
+        var key2 = new TSFunq.ServiceKey("Subjects.Disposable");
 
         expect(key1).not.toBe(key2);
         expect(key1.getHashCode()).toEqual(key2.getHashCode());

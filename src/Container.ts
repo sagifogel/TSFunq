@@ -1,4 +1,5 @@
-﻿import { Owner } from "./Owner";
+﻿import { Args } from "./Args";
+import { Owner } from "./Owner";
 import { Dictionary } from "./Dictionary";
 import { ReuseScope } from "./ReuseScope";
 import { ServiceKey } from "./ServiceKey";
@@ -108,9 +109,10 @@ class Container implements IContainer {
         return this.registerImpl<TService, Func<Container, TService>>(ctor, name, factory);
     }
 
-    private registerImpl<TService, TFunc>(ctor: Constructor<TService>, name: string, factory: TFunc): GenericServiceEntry<TService, TFunc> {
+    private registerImpl<TService, TFunc extends Function>(ctor: Constructor<TService>, name: string, factory: TFunc): GenericServiceEntry<TService, TFunc> {
         let key: ServiceKey;
         let entry: GenericServiceEntry<TService, TFunc>;
+        let resolveServiceName = `${name || ""}${this.arity(factory)}`;
 
         if (<any>ctor === Container) {
             throw new Error("Container service is built-in and read-only.");
@@ -123,7 +125,7 @@ class Container implements IContainer {
             owner: this.defaultOwner
         });
 
-        key = new ServiceKey(ctor, name);
+        key = new ServiceKey(ctor, resolveServiceName);
         this.services.add(key, entry);
 
         return entry;
@@ -140,9 +142,7 @@ class Container implements IContainer {
     public resolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8): TService;
     public resolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9): TService;
     public resolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4, arg5?: TArg5, arg6?: TArg6, arg7?: TArg7, arg8?: TArg8, arg9?: TArg9, arg10?: TArg10): TService {
-        var args = [ctor, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10];
-
-        return this.resolveNamed.apply(this, args);
+        return this.resolveNamed(ctor, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
     }
 
     public resolveNamed<TService>(ctor: Constructor<TService>, name: string): TService;
@@ -155,8 +155,9 @@ class Container implements IContainer {
     public resolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7): TService;
     public resolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8): TService;
     public resolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9): TService;
+    public resolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9, arg10: TArg10): TService;
     public resolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, name: string, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4, arg5?: TArg5, arg6?: TArg6, arg7?: TArg7, arg8?: TArg8, arg9?: TArg9, arg10?: TArg10): TService {
-        var args = Array.prototype.slice.call(arguments, 2);
+        let args = Array.prototype.slice.call(arguments, 2);
 
         return this.resolveImpl<TService>(ctor, name, true, args);
     }
@@ -171,10 +172,9 @@ class Container implements IContainer {
     public tryResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7): TService;
     public tryResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8): TService;
     public tryResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9): TService;
+    public tryResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9, arg10: TArg10): TService;
     public tryResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4, arg5?: TArg5, arg6?: TArg6, arg7?: TArg7, arg8?: TArg8, arg9?: TArg9, arg10?: TArg10): TService {
-        var args = [ctor, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10];
-
-        return this.tryResolveNamed.apply(this, args);
+        return this.tryResolveNamed(ctor, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
     }
 
     public tryResolveNamed<TService>(ctor: Constructor<TService>, name: string): TService;
@@ -187,8 +187,9 @@ class Container implements IContainer {
     public tryResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7): TService;
     public tryResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8): TService;
     public tryResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9): TService;
+    public tryResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9, arg10: TArg10): TService;
     public tryResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, name: string, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4, arg5?: TArg5, arg6?: TArg6, arg7?: TArg7, arg8?: TArg8, arg9?: TArg9, arg10?: TArg10): TService {
-        var args = Array.prototype.slice.call(arguments, 2);
+        let args = Array.prototype.slice.call(arguments, 2);
 
         return this.resolveImpl<TService>(ctor, name, false, args);
     }
@@ -208,27 +209,30 @@ class Container implements IContainer {
     }
 
     public lazyResolveNamed<TService>(ctor: Constructor<TService>, name: string): () => TService;
-    public lazyResolveNamed<TService, TArg1>(ctor: Constructor<TService>, name: string, arg1: TArg1): () => TService;
-    public lazyResolveNamed<TService, TArg1, TArg2>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2): () => TService;
-    public lazyResolveNamed<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3): () => TService;
-    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4): () => TService;
-    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5): () => TService;
-    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6): () => TService;
-    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7): () => TService;
-    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8): () => TService;
-    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9): () => TService;
-    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, name: string, arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4, arg5?: TArg5, arg6?: TArg6, arg7?: TArg7, arg8?: TArg8, arg9?: TArg9, arg10?: TArg10): () => TService {
-        var args: Array<any>;
+    public lazyResolveNamed<TService, TArg1>(ctor: Constructor<TService>, name: string): (arg1: TArg1) => TService;
+    public lazyResolveNamed<TService, TArg1, TArg2>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2) => TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3) => TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4) => TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5) => TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6) => TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7) => TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8) => TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9) => TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9, arg10: TArg10) => TService;
+    public lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, name: string): (arg1?: TArg1, arg2?: TArg2, arg3?: TArg3, arg4?: TArg4, arg5?: TArg5, arg6?: TArg6, arg7?: TArg7, arg8?: TArg8, arg9?: TArg9, arg10?: TArg10) => TService {
+        return function (): TService {
+            let args: Array<any> = Array.prototype.slice.call(arguments);
+            let resolvedName = this.resolveServiceName(name, args);
 
-        this.throwIfNotRegistered<TService, Func<Container, TService>>(ctor, name);
-        args = [ctor, name, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10];
+            this.throwIfNotRegistered(ctor, resolvedName);
 
-        return () => this.resolveNamed.apply(this, args);
+            return this.resolveNamed.apply(this, [ctor, name].concat(args));
+        }.bind(this);
     }
 
     private resolveImpl<TService>(ctor: Constructor<TService>, name: string, throwIfMissing: boolean, args: Array<any>): TService {
         let instance: TService;
-        let entry = this.getEntry<TService, Func<Container, TService>>(ctor, name, throwIfMissing);
+        let entry = this.getEntry<TService, Func<Container, TService>>(ctor, this.resolveServiceName(name, args), throwIfMissing);
 
         if (!entry) {
             return null;
@@ -284,6 +288,26 @@ class Container implements IContainer {
 
     private throwIfNotRegistered<TService, TFunc>(ctor: Constructor<TService>, name: string): void {
         this.getEntry<TService, TFunc>(ctor, name, true);
+    }
+
+    private lenToStr(length: number): string {
+        return length.toString();
+    }
+
+    private arity(fn: Function): string {
+        let length = 0;
+
+        if (fn) {
+            length = fn.length - 1;
+        }
+
+        return this.lenToStr(length);
+    }
+
+    private resolveServiceName(name: string, args: Array<any>): string {
+        let slicedArgs = Args.sliceArray(args);
+
+        return `${name || ""}${this.lenToStr(slicedArgs.length)}`;
     }
 
     public trackDisposable(instance: IDisposable): void {

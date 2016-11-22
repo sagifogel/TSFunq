@@ -118,16 +118,16 @@ interface IRegistrationResolver {
     lazyResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9): () => TService;
     lazyResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9, arg10: TArg10): () => TService;
     lazyResolveNamed<TService>(ctor: Constructor<TService>, name: string): () => TService;
-    lazyResolveNamed<TService, TArg1>(ctor: Constructor<TService>, name: string, arg1: TArg1): () => TService;
-    lazyResolveNamed<TService, TArg1, TArg2>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2): () => TService;
-    lazyResolveNamed<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3): () => TService;
-    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4): () => TService;
-    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5): () => TService;
-    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6): () => TService;
-    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7): () => TService;
-    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8): () => TService;
-    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9): () => TService;
-    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, name: string, arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9, arg10: TArg10): () => TService;
+    lazyResolveNamed<TService, TArg1>(ctor: Constructor<TService>, name: string): (arg1: TArg1) => TService;
+    lazyResolveNamed<TService, TArg1, TArg2>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2) => TService;
+    lazyResolveNamed<TService, TArg1, TArg2, TArg3>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3) => TService;
+    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4) => TService;
+    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5) => TService;
+    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6) => TService;
+    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7) => TService;
+    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8) => TService;
+    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9) => TService;
+    lazyResolveNamed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(ctor: Constructor<TService>, name: string): (arg1: TArg1, arg2: TArg2, arg3: TArg3, arg4: TArg4, arg5: TArg5, arg6: TArg6, arg7: TArg7, arg8: TArg8, arg9: TArg9, arg10: TArg10) => TService;
 }
 
 declare type Func<T1, TResult> = (arg1: T1) => TResult;

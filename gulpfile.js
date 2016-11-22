@@ -43,7 +43,7 @@ gulp.task('servicekey-fixture', function () {
                .pipe(jasmine());
 });
 
-gulp.task("build-and-test", function (cb) {
+gulp.task("all", function (cb) {
     runSequence("build-test", "compress", "header", "container-fixture", "servicekey-fixture", cb);
 });
 
@@ -60,7 +60,7 @@ gulp.task("compress", function () {
                .pipe(closureCompiler({
                     compilation_level: 'ADVANCED',
                     output_wrapper: '!function(){%output%}();',
-                    js_output_file: "TSFunq.js",
+                    js_output_file: "TSFunq.js"
                 }))
                .pipe(gulp.dest(__dirname + "/dist/"))
 });

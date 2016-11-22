@@ -56,6 +56,7 @@
     <Compile Include="tests\jasmine\subjects.js" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="src\Args.ts" />
     <TypeScriptCompile Include="src\Container.ts" />
     <TypeScriptCompile Include="src\Dictionary.ts" />
     <TypeScriptCompile Include="src\EquatbaleString.ts" />
