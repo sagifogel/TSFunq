@@ -9,10 +9,11 @@ import { GenericServiceEntry } from "./GenericServiceEntry";
 
 class Container implements IContainer {
     private parent: Container;
+    private defaultOwner_: Owner;
+    private defaultReuse_: ReuseScope;
     private disposables = new Array<IDisposable>();
     private childContainers = new Array<Container>();
     private services = new Dictionary<ServiceKey, ServiceEntry>();
-
     constructor() {
         let serviceEntry = GenericServiceEntry.build<Container, Func<Container, Container>>({
             instance: this,
@@ -28,19 +29,19 @@ class Container implements IContainer {
     }
 
     public get defaultOwner(): Owner {
-        return this.defaultOwner;
+        return this.defaultOwner_;
     }
 
-    public set defaultOwner(defaultOwner: Owner) {
-        this.defaultOwner = defaultOwner;
+    public set defaultOwner(value: Owner) {
+        this.defaultOwner_ = value;
     }
 
     public get defaultReuse(): ReuseScope {
-        return this.defaultReuse;
+        return this.defaultReuse_;
     }
 
-    public set defaultReuse(reuseScope: ReuseScope) {
-        this.defaultReuse = reuseScope;
+    public set defaultReuse(value: ReuseScope) {
+        this.defaultReuse_ = value;
     }
 
     public createChildContainer(): Container {
