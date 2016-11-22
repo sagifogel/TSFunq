@@ -1,7 +1,7 @@
 {
   "name": "tsfunq",
   "author": "Sagi Fogel",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Funq Dependency injection container port for TypeScript",
   "dependencies": {
   },
@@ -33,5 +33,5 @@
     "dependency",
     "inversion"
   ],
-  "typings": "type_definitions/TSFunq.d.ts"
+  "types": "type_definitions/TSFunq.d.ts"
 }
