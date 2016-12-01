@@ -146,6 +146,6 @@
     export type Constructor<TService> = (new (...args: any[]) => TService) | string;
 }
 
-declare module "TSFunq" {
+declare module "tsfunq" {
     export = TSFunq;
 }
