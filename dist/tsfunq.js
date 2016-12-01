@@ -1,5 +1,5 @@
 /**
- * TSFunq v.1.2.3 - Funq Dependency injection container port for TypeScript
+ * TSFunq v.1.2.4 - Funq Dependency injection container port for TypeScript
  * Copyright (c) 2016 Sagi Fogel
  * MS-PL License
  * https://github.com/sagifogel/TSFunq#readme
