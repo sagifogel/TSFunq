@@ -27,7 +27,7 @@ class Person {
 ```
 ### Create the container and register a dependency
 ```ts
-import * as TSFunq from "TSFunq";
+import * as TSFunq from "tsfunq";
 
 let container = new TSFunq.Container(); 	
 
