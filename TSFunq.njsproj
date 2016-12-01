@@ -47,7 +47,7 @@
     <Folder Include="type_definitions\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="dist\TSFunq.js" />
+    <Compile Include="dist\tsfunq.js" />
     <Compile Include="gulpfile.js" />
     <Compile Include="tests\jasmine\specs\container-fixture.js" />
     <Compile Include="tests\jasmine\specs\servicekey-fixture.js" />
