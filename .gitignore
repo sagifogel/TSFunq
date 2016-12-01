@@ -9,3 +9,4 @@ node_modules/
 spec/
 build/
 *.dat
+.ntvs_analysis.dat.tmp
