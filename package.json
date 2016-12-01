@@ -1,7 +1,7 @@
 {
   "name": "tsfunq",
   "author": "Sagi Fogel",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Funq Dependency injection container port for TypeScript",
   "dependencies": {
   },
@@ -14,7 +14,7 @@
     "google-closure-compiler": "^20160315.2.0",
     "gulp-typescript-closure-compiler": "1.8.x"
   },
-  "main": "./dist/TSFunq.js",
+  "main": "./dist/tsfunq.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sagifogel/TSFunq.git"
@@ -33,5 +33,5 @@
     "dependency",
     "inversion"
   ],
-  "types": "type_definitions/TSFunq.d.ts"
+  "types": "type_definitions/tsfunq.d.ts"
 }

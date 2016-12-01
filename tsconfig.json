@@ -20,5 +20,5 @@
     "src/ServiceKey.ts",
     "src/TSFunq-release.ts"
   ],
-  "externs": ["type_definitions/TSFunq.d.ts" ]
+  "externs": ["type_definitions/tsfunq.d.ts" ]
 }

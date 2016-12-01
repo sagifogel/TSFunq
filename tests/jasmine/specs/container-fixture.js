@@ -519,8 +519,8 @@ describe("DisposingParentContainerDisposesChildContainerAndInstances", function 
         var parent = new TSFunq.Container();
         var child = parent.createChildContainer();
         
-        parent.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); }).reusedWithin(TSFunq.Owner.hierarchy);
-        parent.register(Subjects.Base, function (c) { return new Subjects.Disposable(); }).reusedWithin(TSFunq.Owner.container);
+        parent.register(Subjects.Disposable, function (c) { return new Subjects.Disposable(); }).reusedWithin(TSFunq.ReuseScope.hierarchy);
+        parent.register(Subjects.Base, function (c) { return new Subjects.Disposable(); }).reusedWithin(TSFunq.ReuseScope.container);
         parentFoo = parent.resolve(Subjects.Disposable);
         childFoo = child.resolve(Subjects.Base);
         parent.dispose();

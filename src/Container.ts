@@ -9,10 +9,10 @@ import { GenericServiceEntry } from "./GenericServiceEntry";
 
 class Container implements IContainer {
     private parent: Container;
-    private defaultOwner_: Owner;
-    private defaultReuse_: ReuseScope;
+    private defaultOwner_: Owner = Owner.container;
     private disposables = new Array<IDisposable>();
     private childContainers = new Array<Container>();
+    private defaultReuse_: ReuseScope = ReuseScope.container;
     private services = new Dictionary<ServiceKey, ServiceEntry>();
     constructor() {
         let serviceEntry = GenericServiceEntry.build<Container, Func<Container, Container>>({
@@ -23,8 +23,6 @@ class Container implements IContainer {
             reuse: ReuseScope.container
         });
 
-        this.defaultOwner = Owner.container;
-        this.defaultReuse = ReuseScope.container;
         this.services.add(new ServiceKey(Container), serviceEntry);
     }
 
@@ -122,8 +120,8 @@ class Container implements IContainer {
         entry = GenericServiceEntry.build<TService, TFunc>({
             container: this,
             factory: factory,
-            reuse: this.defaultReuse,
-            owner: this.defaultOwner
+            reuse: this.defaultReuse_,
+            owner: this.defaultOwner_
         });
 
         key = new ServiceKey(ctor, resolveServiceName);

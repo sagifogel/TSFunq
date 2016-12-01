@@ -58,9 +58,9 @@ gulp.task("test", function (cb) {
 gulp.task("compress", function () {
     return gulp.src(["./build/TSFunq.js"])
                .pipe(closureCompiler({
+                    js_output_file: "tsfunq.js",
                     compilation_level: 'ADVANCED',
-                    output_wrapper: '!function(){%output%}();',
-                    js_output_file: "TSFunq.js"
+                    output_wrapper: '!function(){%output%}();'
                 }))
                .pipe(gulp.dest(__dirname + "/dist/"))
 });
@@ -76,7 +76,7 @@ gulp.task("header", function () {
         " */",
         ""].join("\n");
     
-    return gulp.src(__dirname + "/dist/TSFunq.js")
+    return gulp.src(__dirname + "/dist/tsfunq.js")
                .pipe(header(banner, { pkg: pkg }))
                .pipe(gulp.dest(__dirname + "/dist/"));
 });
